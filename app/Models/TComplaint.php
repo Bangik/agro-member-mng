@@ -1,0 +1,36 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Concerns\HasVersion4Uuids as HasUuids;
+
+class TComplaint extends Model
+{
+  use HasUuids, SoftDeletes, HasFactory;
+
+  protected $table = 't_complaint';
+
+  protected $fillable = [
+    'm_member_id',
+    'm_user_id',
+    'code',
+    'title',
+    'complaint',
+    'response',
+    'resolved_at',
+    'status',
+  ];
+
+  public function member()
+  {
+    return $this->belongsTo(Member::class, 'm_member_id');
+  }
+
+  public function user()
+  {
+    return $this->belongsTo(User::class, 'm_user_id');
+  }
+}

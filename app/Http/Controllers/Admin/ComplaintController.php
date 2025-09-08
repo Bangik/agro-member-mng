@@ -1,0 +1,61 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\TComplaint;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class ComplaintController extends Controller
+{
+  public function index(Request $request)
+  {
+    $search = $request->input('search');
+
+    $complaints = TComplaint::query()
+      ->with('member', 'user')
+      ->when($search, function ($query, $search) {
+        return $query->where(function ($q) use ($search) {
+          $q->where('title', 'like', "%{$search}%")
+            ->orWhere('complaint', 'like', "%{$search}%")
+            ->orWhere('status', 'like', "%{$search}%");
+        });
+      })
+      ->orderBy('created_at', 'desc')
+      ->paginate(10);
+
+    return view('content.admin.complaint.index', compact('complaints', 'search'));
+  }
+
+  public function detail($id)
+  {
+    $complaint = TComplaint::with('member', 'user')->findOrFail($id);
+    return view('content.admin.complaint.detail', compact('complaint'));
+  }
+
+  public function update(Request $request, $id)
+  {
+    $request->validate([
+      'response' => 'required|string',
+      'resolved_at' => 'required|date',
+    ]);
+
+    $complaint = TComplaint::findOrFail($id);
+    $complaint->response = $request->response;
+    $complaint->resolved_at = $request->resolved_at;
+    $complaint->status = 'resolved';
+    $complaint->m_user_id = Auth::user()->id;
+    $complaint->save();
+
+    return redirect()->route('admin.complaints.index')->with('success', 'Aduan berhasil diperbarui.');
+  }
+
+  public function delete($id)
+  {
+    $complaint = TComplaint::findOrFail($id);
+    $complaint->delete();
+
+    return response()->json(['success' => true, 'message' => 'Bagian berhasil dihapus.']);
+  }
+}

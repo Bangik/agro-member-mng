@@ -1,0 +1,80 @@
+{
+  "menu": [
+    {
+      "url": "/home",
+      "name": "Dashboards",
+      "icon": "menu-icon tf-icons ri-home-smile-line",
+      "slug": "home",
+      "roles": [
+        "admin",
+        "superadmin",
+        "member"
+      ]
+    },
+    {
+      "url": "/member/complaints",
+      "name": "Riwayat Aduan",
+      "icon": "menu-icon tf-icons ri-chat-3-line",
+      "slug": "member.complaints.index",
+      "roles": [
+        "member"
+      ]
+    },
+    {
+      "menuHeader": "Master",
+      "roles": [
+        "superadmin",
+        "admin"
+      ]
+    },
+    {
+      "url": "/admin/admin",
+      "name": "Manajemen Admin",
+      "icon": "menu-icon tf-icons ri-user-2-line",
+      "slug": "admin.admin.index",
+      "roles": [
+        "superadmin"
+      ]
+    },
+    {
+      "url": "/admin/members",
+      "name": "Manajemen Anggota",
+      "icon": "menu-icon tf-icons ri-user-line",
+      "slug": "admin.members.index",
+      "roles": [
+        "superadmin",
+        "admin"
+      ]
+    },
+    {
+      "url": "/admin/parts",
+      "name": "Manajemen Bagian",
+      "icon": "menu-icon tf-icons ri-box-3-line",
+      "slug": "admin.parts.index",
+      "roles": [
+        "superadmin",
+        "admin"
+      ]
+    },
+    {
+      "url": "/admin/complaints",
+      "name": "Manajemen Pengaduan",
+      "icon": "menu-icon tf-icons ri-chat-3-line",
+      "slug": "admin.complaints.index",
+      "roles": [
+        "superadmin",
+        "admin"
+      ]
+    },
+    {
+      "url": "/admin/settings",
+      "name": "Pengaturan",
+      "icon": "menu-icon tf-icons ri-settings-2-line",
+      "slug": "admin.settings.index",
+      "roles": [
+        "superadmin",
+        "admin"
+      ]
+    }
+  ]
+}
