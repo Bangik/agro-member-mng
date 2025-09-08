@@ -1,0 +1,40 @@
+FROM php:8.4-apache
+
+WORKDIR /var/www/html
+
+RUN apt-get update && apt-get install -y libicu-dev unzip zip zlib1g-dev libpng-dev libzip-dev nano
+RUN docker-php-ext-install gettext intl pdo pdo_mysql gd zip
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# install nodejs
+RUN curl -sL https://deb.nodesource.com/setup_21.x | bash - \
+    && apt-get install -y nodejs
+
+# set php.ini
+# RUN echo "upload_max_filesize = 100M" > /usr/local/etc/php/conf.d/upload.ini
+# RUN echo "post_max_size = 100M" >> /usr/local/etc/php/conf.d/upload.ini
+
+# copy project
+COPY . /var/www/html
+
+# install dependencies php and js
+RUN composer require barryvdh/laravel-debugbar --ignore-platform-reqs
+RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
+RUN npm install
+RUN npm run build
+
+# set permission
+RUN php artisan config:clear
+RUN php artisan optimize
+RUN chmod -R 777 /var/www/html/public
+
+EXPOSE 80
+
+RUN a2enmod rewrite
+
+WORKDIR /var/www/html/public
+
+CMD ["apache2-foreground"]
+
+# docker build -t agro-member -f Dockerfile.local .
+# docker run -d -p 8080:80 -v $(pwd):/var/www/html agro-member
