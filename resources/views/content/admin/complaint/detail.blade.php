@@ -1,17 +1,17 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Response Aduan')
+@section('title', 'Response Aspirasi / Aduan')
 
 @section('content')
     <div class="row">
         <div class="col-md-12">
             <div class="card mb-6">
                 <div class="card-body">
-                    <h5 class="card-title">Detail Aduan</h5>
+                    <h5 class="card-title">Detail Aspirasi / Aduan</h5>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="mb-3">
-                                <label class="form-label">Tanggal Aduan</label>
+                                <label class="form-label">Tanggal Aspirasi / Aduan</label>
                                 <input type="text" class="form-control"
                                     value="{{ $complaint->created_at->translatedFormat('d F Y') }}" readonly />
                             </div>
@@ -22,7 +22,7 @@
                                     readonly />
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Kode Aduan</label>
+                                <label class="form-label">Kode Aspirasi / Aduan</label>
                                 <input type="text" class="form-control" value="{{ $complaint->code }}" readonly />
                             </div>
                             <div class="mb-3">
@@ -31,7 +31,7 @@
                                     readonly />
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Judul Aduan</label>
+                                <label class="form-label">Judul Aspirasi / Aduan</label>
                                 <input type="text" class="form-control" value="{{ $complaint->title }}" readonly />
                             </div>
                             <div class="mb-3">
@@ -47,7 +47,7 @@
                     @csrf
                     @method('PUT')
                     <div class="card-body">
-                        <h5 class="card-title">Form Response Aduan</h5>
+                        <h5 class="card-title">Form Response Aspirasi / Aduan</h5>
                         <div class="row g-5">
                             <div class="col-md-12">
                                 <div class="form-floating form-floating-outline">

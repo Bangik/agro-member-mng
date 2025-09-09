@@ -1,6 +1,6 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Riwayat Aduan')
+@section('title', 'Riwayat Aspirasi / Aduan')
 
 @section('page-script')
     @vite('resources/assets/js/index-complaints-member.js')
@@ -23,7 +23,7 @@
                         <button class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal"
                             data-bs-target="#modalCenter">
                             <i class="ri-add-line me-0 me-sm-1 d-inline-block d-sm-none"></i>
-                            <span class="d-none d-sm-inline-block"> Buat Aduan </span>
+                            <span class="d-none d-sm-inline-block"> Buat Aspirasi / Aduan </span>
                         </button>
                     </div>
                 </div>
@@ -33,8 +33,8 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>Kode Aduan</th>
-                        <th>Judul Aduan</th>
+                        <th>Kode Aspirasi / Aduan</th>
+                        <th>Judul Aspirasi / Aduan</th>
                         <th>Status</th>
                         <th>Tanggal RTL</th>
                         <th>Direspon Oleh</th>
@@ -93,7 +93,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalCenterTitle">Buat Aduan</h5>
+                    <h5 class="modal-title" id="modalCenterTitle">Buat Aspirasi / Aduan</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="{{ route('member.complaints.store') }}" method="POST" id="form-create-complaint">
@@ -103,9 +103,9 @@
                             <div class="col-md-12">
                                 <div class="form-floating form-floating-outline">
                                     <input type="text" class="form-control @error('title') is-invalid @enderror"
-                                        id="title" name="title" autofocus placeholder="Judul Aduan"
+                                        id="title" name="title" autofocus placeholder="Judul Aspirasi / Aduan"
                                         value="{{ old('title') }}">
-                                    <label for="title">Judul Aduan</label>
+                                    <label for="title">Judul Aspirasi / Aduan</label>
                                     @error('title')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -142,7 +142,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalCenterTitle">Edit Aduan</h5>
+                        <h5 class="modal-title" id="modalCenterTitle">Edit Aspirasi / Aduan</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="{{ route('member.complaints.update', $complaint->id) }}" method="POST">
@@ -153,9 +153,9 @@
                                 <div class="col-md-12">
                                     <div class="form-floating form-floating-outline">
                                         <input type="text" class="form-control @error('title') is-invalid @enderror"
-                                            id="title" name="title" autofocus placeholder="Judul Aduan"
+                                            id="title" name="title" autofocus placeholder="Judul Aspirasi / Aduan"
                                             value="{{ old('title', $complaint->title) }}">
-                                        <label for="title">Judul Aduan</label>
+                                        <label for="title">Judul Aspirasi / Aduan</label>
                                         @error('title')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>

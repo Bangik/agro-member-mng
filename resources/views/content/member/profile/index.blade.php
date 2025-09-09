@@ -42,7 +42,7 @@
                                     <input class="form-control @error('reg_number') is-invalid @enderror" type="text"
                                         id="reg_number" name="reg_number"
                                         value="{{ old('reg_number', $member->reg_number) }}" autofocus
-                                        placeholder="Nomor Induk" />
+                                        placeholder="Nomor Induk" disabled />
                                     <label for="reg_number">Nomor Induk</label>
                                     @error('reg_number')
                                         <span class="invalid-feedback" role="alert">

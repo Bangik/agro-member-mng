@@ -3,7 +3,7 @@
 return [
   "creatorName" => "Bangik",
   "creatorUrl" => "https://bangik.github.io",
-  "templateName" => "Manajemen Aduan",
+  "templateName" => "Aspirasi / Aduan",
   "templateSuffix" => "Bootstrap Dashboard FREE",
   "templateVersion" => "2.0.0",
   "templateFree" => true,

@@ -1,6 +1,6 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Dashboard - Analytics')
+@section('title', 'Dashboard')
 
 @section('vendor-style')
     @vite('resources/assets/vendor/libs/apex-charts/apex-charts.scss')
@@ -23,7 +23,7 @@
                 },
                 series: [{{ $maleCount }}, {{ $femaleCount }}],
                 labels: ['Laki-laki', 'Perempuan'],
-                colors: ['#1E90FF', '#FF69B4'],
+                colors: ['#116039', '#8dc440'],
                 responsive: [{
                     breakpoint: 480,
                     options: {
@@ -49,7 +49,8 @@
                 }],
                 xaxis: {
                     type: 'category'
-                }
+                },
+                colors: ['#45ab48']
             };
 
             var chart = new ApexCharts(document.querySelector("#demojk"), optionsJK);
@@ -67,9 +68,10 @@
             <div class="card h-100">
                 <div class="card-header">
                     <div class="d-flex align-items-center justify-content-between">
-                        <h5 class="card-title m-0 me-2">Overview Aduan</h5>
+                        <h5 class="card-title m-0 me-2">Overview Aspirasi / Aduan</h5>
                     </div>
-                    <p class="small mb-0"><span class="h6 mb-0">Total {{ $totalComplaintsThisMonth }}</span> aduan bulan ini
+                    <p class="small mb-0"><span class="h6 mb-0">Total {{ $totalComplaintsThisMonth }}</span> Aspirasi / Aduan
+                        bulan ini
                     </p>
                 </div>
                 <div class="card-body">
@@ -82,7 +84,9 @@
                                     </div>
                                 </div>
                                 <div class="ms-3">
-                                    <p class="mb-0">Belum Ditindaklanjuti</p>
+                                    <a href="{{ route('admin.complaints.index') . '?status=pending' }}"
+                                        class="mb-0 text-warning">Belum
+                                        Ditindaklanjuti</a>
                                     <h5 class="mb-0">{{ $complaints->where('status', 'pending')->count() }}</h5>
                                 </div>
                             </div>
@@ -95,7 +99,8 @@
                                     </div>
                                 </div>
                                 <div class="ms-3">
-                                    <p class="mb-0">Proses</p>
+                                    <a href="{{ route('admin.complaints.index') . '?status=in_progress' }}"
+                                        class="mb-0 text-info">Proses</a>
                                     <h5 class="mb-0">{{ $complaints->where('status', 'in_progress')->count() }}</h5>
                                 </div>
                             </div>
@@ -108,7 +113,8 @@
                                     </div>
                                 </div>
                                 <div class="ms-3">
-                                    <p class="mb-0">Sudah Ditindaklanjuti</p>
+                                    <a href="{{ route('admin.complaints.index') . '?status=resolved' }}"
+                                        class="mb-0">Sudah Ditindaklanjuti</a>
                                     <h5 class="mb-0">{{ $complaints->where('status', 'resolved')->count() }}</h5>
                                 </div>
                             </div>

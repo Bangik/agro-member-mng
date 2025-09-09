@@ -46,4 +46,8 @@ document.addEventListener('DOMContentLoaded', function () {
       $('#form-filter').submit();
     }, 1000);
   });
+
+  $('#status').on('change', function () {
+    $('#form-filter').submit();
+  });
 });

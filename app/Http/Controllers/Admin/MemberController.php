@@ -13,12 +13,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class MemberController extends Controller
 {
   public function index(Request $request)
   {
     $search = $request->input('search');
+    $status = $request->input('status');
+
     $members = Member::query()
       ->with('contracts')
       ->when($search, function ($query) use ($search) {
@@ -28,6 +31,17 @@ class MemberController extends Controller
             ->orWhere('national_id_number', 'like', "%{$search}%")
             ->orWhere('email', 'like', "%{$search}%");
         });
+      })
+      ->when($status, function ($query) use ($status) {
+        if ($status === 'active') {
+          return $query->whereHas('contracts', function ($q) {
+            $q->where('end_date', '>=', now());
+          });
+        } elseif ($status === 'inactive') {
+          return $query->whereDoesntHave('contracts', function ($q) {
+            $q->where('end_date', '>=', now());
+          });
+        }
       })
       ->orderBy('created_at', 'desc')
       ->paginate(10)
@@ -201,6 +215,23 @@ class MemberController extends Controller
       ->withQueryString();
     $parts = Part::all();
     return view('content.admin.member.detail', compact('member', 'contracts', 'parts'));
+  }
+
+  public function generatePdf($id)
+  {
+    $member = Member::with([
+      'contracts' => function ($query) {
+        $query->with('part')->orderBy('created_at', 'desc');
+      }
+    ])->where('id', $id)->firstOrFail();
+
+    return Pdf::loadView('content.global.pdf-profile', [
+      'member' => $member,
+      'employment' => $member->contracts->first(),
+      'contracts' => $member->contracts,
+      'chairman_name' => 'Sutrisno',
+    ])->setPaper('A4')
+      ->stream('profile.pdf');
   }
 
   public function import(Request $request)

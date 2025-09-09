@@ -38,7 +38,7 @@ class ComplaintController extends Controller
       'complaint' => $validated['complaint'],
     ]);
 
-    return redirect()->back()->with('success', 'Aduan berhasil dikirim.');
+    return redirect()->back()->with('success', 'Aspirasi / Aduan berhasil dikirim.');
   }
 
   public function update(Request $request, $id)
@@ -55,7 +55,7 @@ class ComplaintController extends Controller
       'complaint' => $validated['complaint'],
     ]);
 
-    return redirect()->back()->with('success', 'Aduan berhasil diperbarui.');
+    return redirect()->back()->with('success', 'Aspirasi / Aduan berhasil diperbarui.');
   }
 
   public function destroy($id)
@@ -64,6 +64,6 @@ class ComplaintController extends Controller
     $complaint = TComplaint::where('id', $id)->where('m_member_id', $member->id)->firstOrFail();
     $complaint->delete();
 
-    return response()->json(['success' => 'Aduan berhasil dihapus.']);
+    return response()->json(['success' => 'Aspirasi / Aduan berhasil dihapus.']);
   }
 }

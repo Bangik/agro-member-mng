@@ -25,6 +25,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/create', [MemberController::class, 'create'])->name('admin.members.create');
     Route::post('/import', [MemberController::class, 'import'])->name('admin.members.import');
     Route::post('/', [MemberController::class, 'store'])->name('admin.members.store');
+    Route::get('/{id}/detail/pdf', [MemberController::class, 'generatePdf'])->name('admin.members.detail.pdf');
     Route::get('/{id}/detail', [MemberController::class, 'detail'])->name('admin.members.detail');
     Route::get('/{id}/edit', [MemberController::class, 'edit'])->name('admin.members.edit');
     Route::put('/{id}', [MemberController::class, 'update'])->name('admin.members.update');
@@ -77,11 +78,8 @@ Route::prefix('member')->middleware(['auth'])->group(function () {
   });
 
   Route::get('/profile', [ProfileController::class, 'index'])->name('member.profile.index');
+  Route::get('/profile/pdf', [ProfileController::class, 'generatePdf'])->name('member.profile.pdf');
   Route::put('/profile/{id}', [ProfileController::class, 'update'])->name('member.profile.update');
-});
-
-Route::prefix('global')->middleware(['auth'])->group(function () {
-  Route::post('/users/{id}/update', [GlobalUserController::class, 'update'])->name('users.update');
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->middleware(['auth'])->name('home');

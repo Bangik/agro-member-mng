@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error(error);
             Swal.fire({
               title: 'Error!',
-              text: 'Terjadi kesalahan saat menghapus aduan.',
+              text: 'Terjadi kesalahan saat menghapus Aspirasi / Aduan.',
               icon: 'error'
             });
           });

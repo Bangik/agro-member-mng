@@ -1,6 +1,6 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Management Aduan')
+@section('title', 'Management Aspirasi / Aduan')
 
 @section('page-script')
     @vite('resources/assets/js/index-complaints.js')
@@ -20,6 +20,18 @@
                                 <input type="search" class="form-control form-control-sm" placeholder="Cari..."
                                     id="search" name="search" value="{{ request('search') }}" />
                             </label>
+                            <label>
+                                <select name="status" id="status" class="form-select form-select-sm"
+                                    onchange="this.form.submit()">
+                                    <option value="">Semua Status</option>
+                                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending
+                                    </option>
+                                    <option value="in_progress" {{ request('status') == 'in_progress' ? 'selected' : '' }}>
+                                        In Progress</option>
+                                    <option value="resolved" {{ request('status') == 'resolved' ? 'selected' : '' }}>
+                                        Resolved</option>
+                                </select>
+                            </label>
                         </form>
                     </div>
                 </div>
@@ -29,9 +41,9 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>Kode Aduan</th>
+                        <th>Kode Aspirasi / Aduan</th>
                         <th>Nama Pengadu</th>
-                        <th>Judul Aduan</th>
+                        <th>Judul Aspirasi / Aduan</th>
                         <th>Status</th>
                         <th>Tanggal RTL</th>
                         <th>Tanggal Resolved</th>
@@ -91,7 +103,7 @@
                                         <a href="{{ route('admin.complaints.detail', $complaint->id) }}"
                                             class="dropdown-item">
                                             <i class="ri-pencil-line me-1"></i>
-                                            Response Aduan</a>
+                                            Response Aspirasi / Aduan</a>
                                         <button class="dropdown-item button-swal" data-id="{{ $complaint->id }}"
                                             data-name="{{ $complaint->title }}"><i class="ri-delete-bin-6-line me-1"></i>
                                             Delete</button>

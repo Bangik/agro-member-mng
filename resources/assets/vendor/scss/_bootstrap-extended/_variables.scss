@@ -47,10 +47,13 @@ $yellow: #ffb400 !default;
 $green: #56ca00 !default;
 $teal: #20c997 !default;
 $cyan: #28c3d7 !default;
+$greenS: #116039 !default; // Darker green for success state
+$greenP: #45ab48 !default; // Lighter green for success state
+$greenA: #8dc440 !default; // Accent green for success state
 // scss-docs-end color-variables
 
 // scss-docs-start theme-color-variables
-$primary: $purple !default;
+$primary: $greenS !default;
 $secondary: #8a8d93 !default;
 $success: $green !default;
 $info: $blue !default;

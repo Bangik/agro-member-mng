@@ -13,7 +13,7 @@
     },
     {
       "url": "/member/complaints",
-      "name": "Riwayat Aduan",
+      "name": "Riwayat Aspirasi / Aduan",
       "icon": "menu-icon tf-icons ri-chat-3-line",
       "slug": "member.complaints.index",
       "roles": [
@@ -58,7 +58,7 @@
     },
     {
       "url": "/admin/complaints",
-      "name": "Manajemen Pengaduan",
+      "name": "Aspirasi/Adusan",
       "icon": "menu-icon tf-icons ri-chat-3-line",
       "slug": "admin.complaints.index",
       "roles": [

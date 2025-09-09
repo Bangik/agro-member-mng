@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Helpers\FileHelper;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ProfileController extends Controller
 {
@@ -24,7 +25,7 @@ class ProfileController extends Controller
     $member = Member::findOrFail($id);
 
     $validated = $request->validate([
-      'reg_number'         => ['required', 'string', 'max:255'],
+      // 'reg_number'         => ['required', 'string', 'max:255'],
       'national_id_number' => ['required', 'digits:16'], // NIK 16 digit (opsional: ubah sesuai kebutuhan)
       'name'               => ['required', 'string', 'max:255'],
       'birth_place'        => ['nullable', 'string', 'max:255'],
@@ -85,5 +86,22 @@ class ProfileController extends Controller
       report($e);
       return redirect()->route('member.profile.index', $id)->with('error', 'Failed to update member.');
     }
+  }
+
+  public function generatePdf()
+  {
+    $member = Member::with([
+      'contracts' => function ($query) {
+        $query->with('part')->orderBy('created_at', 'desc');
+      }
+    ])->where('m_user_id', Auth::user()->id)->firstOrFail();
+
+    return Pdf::loadView('content.global.pdf-profile', [
+      'member' => $member,
+      'employment' => $member->contracts->first(),
+      'contracts' => $member->contracts,
+      'chairman_name' => 'Sutrisno',
+    ])->setPaper('A4')
+      ->stream('profile.pdf');
   }
 }

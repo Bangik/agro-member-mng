@@ -143,6 +143,11 @@
                                 <h5 class="card-title mb-0">Riwayat Kontrak</h5>
                             </div>
                             <div class="add-new">
+                                <a href="{{ route('admin.members.detail.pdf', $member->id) }}" target="_blank"
+                                    class="btn btn-primary waves-effect waves-light">
+                                    <i class="ri-add-line me-0 me-sm-1 d-inline-block d-sm-none"></i>
+                                    <span class="d-none d-sm-inline-block"> Print Profile </span>
+                                </a>
                                 <button class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal"
                                     data-bs-target="#modalCenter">
                                     <i class="ri-add-line me-0 me-sm-1 d-inline-block d-sm-none"></i>

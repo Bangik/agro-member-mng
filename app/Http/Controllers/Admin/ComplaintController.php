@@ -12,6 +12,7 @@ class ComplaintController extends Controller
   public function index(Request $request)
   {
     $search = $request->input('search');
+    $status = $request->input('status');
 
     $complaints = TComplaint::query()
       ->with('member', 'user')
@@ -22,10 +23,13 @@ class ComplaintController extends Controller
             ->orWhere('status', 'like', "%{$search}%");
         });
       })
+      ->when($status, function ($query, $status) {
+        return $query->where('status', $status);
+      })
       ->orderBy('created_at', 'desc')
       ->paginate(10);
 
-    return view('content.admin.complaint.index', compact('complaints', 'search'));
+    return view('content.admin.complaint.index', compact('complaints', 'search', 'status'));
   }
 
   public function detail($id)
@@ -48,7 +52,7 @@ class ComplaintController extends Controller
     $complaint->m_user_id = Auth::user()->id;
     $complaint->save();
 
-    return redirect()->route('admin.complaints.index')->with('success', 'Aduan berhasil diperbarui.');
+    return redirect()->route('admin.complaints.index')->with('success', 'Aspirasi / Aduan berhasil diperbarui.');
   }
 
   public function delete($id)

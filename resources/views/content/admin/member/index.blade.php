@@ -20,6 +20,17 @@
                                 <input type="search" class="form-control form-control-sm" placeholder="Cari Berdasarkan Nama"
                                     id="search" name="search" value="{{ request('search') }}" />
                             </label>
+                            {{-- filter by status --}}
+                            <label>
+                                <select name="status" id="status" class="form-select form-select-sm"
+                                    onchange="this.form.submit()">
+                                    <option value="">Semua Status</option>
+                                    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Aktif
+                                    </option>
+                                    <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Tidak
+                                        Aktif</option>
+                                </select>
+                            </label>
                         </form>
                     </div>
                     <div class="add-new">
