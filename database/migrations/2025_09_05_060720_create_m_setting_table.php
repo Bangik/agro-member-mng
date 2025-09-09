@@ -17,6 +17,11 @@ return new class extends Migration
       $table->string('kta_file_before')->nullable();
       $table->string('kta_path_now')->nullable();
       $table->string('kta_file_now')->nullable();
+
+      $table->string('kta_back_path_before')->nullable();
+      $table->string('kta_back_file_before')->nullable();
+      $table->string('kta_back_path_now')->nullable();
+      $table->string('kta_back_file_now')->nullable();
       $table->timestamps();
     });
   }

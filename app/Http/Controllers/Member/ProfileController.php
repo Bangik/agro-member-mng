@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Helpers\FileHelper;
+use App\Models\Setting;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -103,5 +104,12 @@ class ProfileController extends Controller
       'chairman_name' => 'Sutrisno',
     ])->setPaper('A4')
       ->stream('profile.pdf');
+  }
+
+  public function printKTA()
+  {
+    $member = Member::with('contracts.part')->where('m_user_id', Auth::user()->id)->firstOrFail();
+    $setting = Setting::first();
+    return view('content.admin.settings.kta', compact('member', 'setting'));
   }
 }

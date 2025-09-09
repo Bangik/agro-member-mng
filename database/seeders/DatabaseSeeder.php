@@ -50,6 +50,8 @@ class DatabaseSeeder extends Seeder
     Setting::factory()->create([
       'kta_path_now' => '/kta',
       'kta_file_now' => 'default.png',
+      'kta_back_path_now' => '/kta',
+      'kta_back_file_now' => 'default.png',
     ]);
   }
 }

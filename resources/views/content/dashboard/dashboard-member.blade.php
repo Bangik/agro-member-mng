@@ -143,6 +143,11 @@
                                 <h5 class="card-title mb-0">Riwayat Kontrak</h5>
                             </div>
                             <div class="add-new">
+                                <a href="{{ route('member.profile.kta') }}"
+                                    class="btn btn-primary waves-effect waves-light" target="_blank">
+                                    <i class="ri-add-line me-0 me-sm-1 d-inline-block d-sm-none"></i>
+                                    <span class="d-none d-sm-inline-block"> Print KTA </span>
+                                </a>
                                 <a href="{{ route('member.profile.pdf') }}"
                                     class="btn btn-primary waves-effect waves-light" target="_blank">
                                     <i class="ri-add-line me-0 me-sm-1 d-inline-block d-sm-none"></i>

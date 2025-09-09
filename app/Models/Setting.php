@@ -17,6 +17,10 @@ class Setting extends Model
     'kta_file_before',
     'kta_path_now',
     'kta_file_now',
+    'kta_back_path_before',
+    'kta_back_file_before',
+    'kta_back_path_now',
+    'kta_back_file_now',
   ];
 
   public function ktaBeforeUrl()
@@ -27,5 +31,15 @@ class Setting extends Model
   public function ktaNowUrl()
   {
     return $this->kta_path_now ? FileHelper::get($this->kta_path_now, $this->kta_file_now) : null;
+  }
+
+  public function ktaBackBeforeUrl()
+  {
+    return $this->kta_back_path_before ? FileHelper::get($this->kta_back_path_before, $this->kta_back_file_before) : null;
+  }
+
+  public function ktaBackNowUrl()
+  {
+    return $this->kta_back_path_now ? FileHelper::get($this->kta_back_path_now, $this->kta_back_file_now) : null;
   }
 }

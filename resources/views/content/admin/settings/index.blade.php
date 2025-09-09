@@ -14,7 +14,16 @@
                             @if ($setting->kta_file_before === null)
                                 <p class="text-muted fst-italic">Belum ada desain lama</p>
                             @else
-                                <img src="{{ $setting->ktaBeforeUrl() }}" alt="KTA Desain Lama" class="img-fluid border" />
+                                <img src="{{ $setting->ktaBeforeUrl() }}" alt="KTA Desain Lama" class="img-fluid border"
+                                    width="323px" />
+                            @endif
+                            <br>
+                            <br>
+                            @if ($setting->kta_file_before === null)
+                                <p class="text-muted fst-italic">Belum ada desain lama</p>
+                            @else
+                                <img src="{{ $setting->ktaBeforeUrl() }}" alt="KTA Desain Lama" class="img-fluid border"
+                                    width="323px" />
                             @endif
                         </div>
                         <div class="col-md-6">
@@ -30,8 +39,16 @@
                         @method('PUT')
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <label for="kta_file_now" class="form-label">Unggah Desain Baru</label>
+                                <label for="kta_file_now" class="form-label">Unggah KTA Depan Baru</label>
                                 <input class="form-control" type="file" id="kta_file_now" name="kta_file_now"
+                                    accept="image/*" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="kta_file_back_now" class="form-label">Unggah KTA Belakang Baru</label>
+                                <input class="form-control" type="file" id="kta_file_back_now" name="kta_file_back_now"
                                     accept="image/*" />
                             </div>
                         </div>

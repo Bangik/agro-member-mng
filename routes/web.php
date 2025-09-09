@@ -81,6 +81,7 @@ Route::prefix('member')->middleware(['auth'])->group(function () {
 
   Route::get('/profile', [ProfileController::class, 'index'])->name('member.profile.index');
   Route::get('/profile/pdf', [ProfileController::class, 'generatePdf'])->name('member.profile.pdf');
+  Route::get('/profile/kta/print', [ProfileController::class, 'printKTA'])->name('member.profile.kta');
   Route::put('/profile/{id}', [ProfileController::class, 'update'])->name('member.profile.update');
 });
 

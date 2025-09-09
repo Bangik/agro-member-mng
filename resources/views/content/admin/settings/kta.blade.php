@@ -12,6 +12,18 @@
         overflow: hidden;
     }
 
+    .kta-back {
+        position: relative;
+        width: 85.6mm;
+        height: 53.98mm;
+        background: url('{{ $setting->ktaBackNowUrl() }}') no-repeat center center / cover;
+        border: 1px solid #ddd;
+        /* biar kelihatan saat preview */
+        border-radius: 2mm;
+        /* opsional, sesuaikan desain */
+        overflow: hidden;
+    }
+
     .kta__field {
         position: absolute;
         color: #111;
@@ -23,32 +35,73 @@
         /* atau hapus kalau butuh wrapping */
     }
 
+    .kta__photo {
+        position: absolute;
+        top: 4mm;
+        left: 43mm;
+        width: 11mm;
+        height: 13mm;
+        /* object-fit: cover; */
+        border-radius: 1mm;
+    }
+
+    .kta__photo_img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 1mm;
+    }
+
     /* Contoh koordinat—SILAKAN SESUAIKAN dengan template Anda */
     .kta__name {
-        top: 18mm;
-        left: 25mm;
-        font-size: 3.6mm;
+        top: 15mm;
+        left: 55mm;
+        font-size: 2mm;
         font-weight: 700;
         max-width: 55mm;
     }
 
-    .kta__number {
-        top: 23mm;
-        left: 25mm;
-        font-size: 3.2mm;
+    .kta__part {
+        top: 17mm;
+        left: 55mm;
+        font-size: 2mm;
         letter-spacing: .2mm;
     }
 
-    .kta__nik {
-        top: 28mm;
-        left: 25mm;
-        font-size: 3mm;
+    .kta__number {
+        top: 22mm;
+        left: 55mm;
+        font-size: 2mm;
+        letter-spacing: .2mm;
     }
 
-    .kta__ttl {
-        top: 33mm;
-        left: 25mm;
-        font-size: 3mm;
+    .kta__phone_number {
+        top: 30mm;
+        left: 55mm;
+        font-size: 2mm;
+        font-weight: 500;
+        letter-spacing: .2mm;
+    }
+
+    .kta__address {
+        top: 25mm;
+        left: 55mm;
+        font-weight: 500;
+        font-size: 2mm;
+    }
+
+    .kta__start_date {
+        top: 36mm;
+        left: 55mm;
+        font-weight: 500;
+        font-size: 2mm;
+    }
+
+    .kta__end_date {
+        top: 41mm;
+        left: 55mm;
+        font-weight: 500;
+        font-size: 2mm;
     }
 
     .kta__qr {
@@ -56,15 +109,6 @@
         right: 8mm;
         width: 16mm;
         height: 16mm;
-    }
-
-    .kta__photo {
-        top: 10mm;
-        left: 8mm;
-        width: 18mm;
-        height: 24mm;
-        object-fit: cover;
-        border-radius: 1mm;
     }
 
     /* Layout grid untuk preview banyak kartu di layar */
@@ -81,6 +125,7 @@
             /* atau langsung size: 85.6mm 53.98mm; untuk 1 kartu per halaman */
             margin: 8mm;
             /* sesuaikan margin printer */
+            padding: 0;
         }
 
         body {
@@ -98,17 +143,28 @@
 </style>
 
 <div class="kta">
-    <div class="kta__field kta__name">Nama anggota</div>
-    <div class="kta__field kta__number">No. Anggota: 123</div>
-    <div class="kta__field kta__nik">NIK: 35092112345789</div>
-    <div class="kta__field kta__ttl">
-        TTL: Jember,
-        {{ \Carbon\Carbon::parse(now())->format('d-m-Y') ?? '-' }}
+    <div class="kta__photo">
+        <img src="{{ $member ? $member->photoUrl() : asset('assets/img/avatars/1.png') }}" alt=""
+            class="kta__photo_img">
+    </div>
+    <div class="kta__field kta__name">{{ $member ? $member->name : 'Nama' }}</div>
+    <div class="kta__field kta__part">{{ $member ? $member->contracts->first()->part->name : 'Bagian/Divisi' }}</div>
+    <div class="kta__field kta__number">{{ $member ? $member->reg_number : 'Nomor Anggota' }}</div>
+    <div class="kta__field kta__address">{{ $member ? $member->address : 'Alamat' }}</div>
+    <div class="kta__field kta__phone_number">{{ $member ? $member->phone : 'Nomor HP' }}</div>
+    <div class="kta__field kta__start_date">{{ $member ? $member->contracts->first()->start_date : 'Tanggal Mulai' }}
+    </div>
+    <div class="kta__field kta__end_date">{{ $member ? $member->contracts->first()->end_date : 'Tanggal Berakhir' }}
     </div>
 </div>
-{{--
+<br>
+<div class="kta-back">
+</div>
+
 <script>
-    window.onload = function() {
-        window.print();
-    }
-</script> --}}
+    @if (\Illuminate\Support\Str::contains(url()->current(), 'print'))
+        window.onload = function() {
+            window.print();
+        }
+    @endif
+</script>
