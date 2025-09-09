@@ -87,7 +87,7 @@
                                     <a href="{{ route('admin.complaints.index') . '?status=pending' }}"
                                         class="mb-0 text-warning">Belum
                                         Ditindaklanjuti</a>
-                                    <h5 class="mb-0">{{ $complaints->where('status', 'pending')->count() }}</h5>
+                                    <h5 class="mb-0">{{ $complaintPending }}</h5>
                                 </div>
                             </div>
                         </div>
@@ -101,7 +101,7 @@
                                 <div class="ms-3">
                                     <a href="{{ route('admin.complaints.index') . '?status=in_progress' }}"
                                         class="mb-0 text-info">Proses</a>
-                                    <h5 class="mb-0">{{ $complaints->where('status', 'in_progress')->count() }}</h5>
+                                    <h5 class="mb-0">{{ $complaintInProgress }}</h5>
                                 </div>
                             </div>
                         </div>
@@ -115,7 +115,7 @@
                                 <div class="ms-3">
                                     <a href="{{ route('admin.complaints.index') . '?status=resolved' }}"
                                         class="mb-0">Sudah Ditindaklanjuti</a>
-                                    <h5 class="mb-0">{{ $complaints->where('status', 'resolved')->count() }}</h5>
+                                    <h5 class="mb-0">{{ $complaintResolved }}</h5>
                                 </div>
                             </div>
                         </div>

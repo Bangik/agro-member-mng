@@ -37,6 +37,9 @@ class HomeController extends Controller
       $totalComplaintsThisMonth = TComplaint::whereMonth('created_at', $currentMonth)->count();
       $maleCount = Member::where('gender', 'male')->count();
       $femaleCount = Member::where('gender', 'female')->count();
+      $complaintPending = TComplaint::where('status', 'pending')->count();
+      $complaintInProgress = TComplaint::where('status', 'in_progress')->count();
+      $complaintResolved = TComplaint::where('status', 'resolved')->count();
 
       $rows = Part::query()
         ->leftJoin('t_contract as c', 'c.m_part_id', '=', 'm_part.id')
@@ -52,6 +55,9 @@ class HomeController extends Controller
         'maleCount',
         'femaleCount',
         'rows',
+        'complaintPending',
+        'complaintInProgress',
+        'complaintResolved',
       ));
     } else {
       $member = Member::where('m_user_id', Auth::user()->id)->first();

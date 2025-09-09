@@ -42,6 +42,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
   Route::prefix('complaints')->group(function () {
     Route::get('/', [ComplaintController::class, 'index'])->name('admin.complaints.index');
     Route::get('/{id}/detail', [ComplaintController::class, 'detail'])->name('admin.complaints.detail');
+    Route::get('/{id}/detail/pdf', [ComplaintController::class, 'generatePdf'])->name('admin.complaints.detail.pdf');
     Route::put('/{id}', [ComplaintController::class, 'update'])->name('admin.complaints.update');
     Route::delete('/{id}', [ComplaintController::class, 'delete'])->name('admin.complaints.delete');
   });
@@ -73,6 +74,7 @@ Route::prefix('member')->middleware(['auth'])->group(function () {
   Route::prefix('complaints')->group(function () {
     Route::get('/', [MemberComplaintController::class, 'index'])->name('member.complaints.index');
     Route::post('/', [MemberComplaintController::class, 'store'])->name('member.complaints.store');
+    Route::get('/{id}/detail/pdf', [MemberComplaintController::class, 'generatePdf'])->name('member.complaints.detail.pdf');
     Route::put('/{id}', [MemberComplaintController::class, 'update'])->name('member.complaints.update');
     Route::delete('/{id}', [MemberComplaintController::class, 'destroy'])->name('member.complaints.destroy');
   });

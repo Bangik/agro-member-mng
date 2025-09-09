@@ -100,6 +100,10 @@
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
                                         data-bs-toggle="dropdown"><i class="ri-more-2-line"></i></button>
                                     <div class="dropdown-menu">
+                                        <a href="{{ route('admin.complaints.detail.pdf', $complaint->id) }}"
+                                            class="dropdown-item" target="_blank">
+                                            <i class="ri-file-download-line me-1"></i>
+                                            Download PDF</a>
                                         <a href="{{ route('admin.complaints.detail', $complaint->id) }}"
                                             class="dropdown-item">
                                             <i class="ri-pencil-line me-1"></i>

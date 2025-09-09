@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\TComplaint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ComplaintController extends Controller
 {
@@ -53,6 +54,15 @@ class ComplaintController extends Controller
     $complaint->save();
 
     return redirect()->route('admin.complaints.index')->with('success', 'Aspirasi / Aduan berhasil diperbarui.');
+  }
+
+  public function generatePdf($id)
+  {
+    $complaint = TComplaint::with('member', 'user')->findOrFail($id);
+    return Pdf::loadView('content.global.pdf-mail-complaint', [
+      'complaint' => $complaint,
+    ])->setPaper('A4')
+      ->stream('mail-complaint-' . $complaint->id . '.pdf');
   }
 
   public function delete($id)
