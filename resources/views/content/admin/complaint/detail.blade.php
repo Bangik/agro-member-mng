@@ -18,7 +18,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Tanggal Response</label>
                                 <input type="text" class="form-control"
-                                    value="{{ $complaint->resolved_at ? \Carbon\Carbon::parse($complaint->resolved_at)->translatedFormat('d F Y') : '-' }}"
+                                    value="{{ $complaint->response_at ? \Carbon\Carbon::parse($complaint->response_at)->translatedFormat('d F Y') : '-' }}"
                                     readonly />
                             </div>
                             <div class="mb-3">
@@ -51,11 +51,11 @@
                         <div class="row g-5">
                             <div class="col-md-12">
                                 <div class="form-floating form-floating-outline">
-                                    <input type="date" class="form-control @error('resolved_at') is-invalid @enderror"
-                                        id="resolved_at" name="resolved_at" autofocus placeholder="Response Date"
-                                        value="{{ old('resolved_at', $complaint->resolved_at) }}">
-                                    <label for="resolved_at">Tanggal Response</label>
-                                    @error('resolved_at')
+                                    <input type="date" class="form-control @error('response_at') is-invalid @enderror"
+                                        id="response_at" name="response_at" autofocus placeholder="Response Date"
+                                        value="{{ old('response_at', $complaint->response_at) }}">
+                                    <label for="response_at">Tanggal Response</label>
+                                    @error('response_at')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>

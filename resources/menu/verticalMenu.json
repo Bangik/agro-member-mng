@@ -58,7 +58,7 @@
     },
     {
       "url": "/admin/complaints",
-      "name": "Aspirasi/Adusan",
+      "name": "Aspirasi/Aduan",
       "icon": "menu-icon tf-icons ri-chat-3-line",
       "slug": "admin.complaints.index",
       "roles": [

@@ -53,10 +53,60 @@
                 colors: ['#45ab48']
             };
 
+            const optionsStatus = {
+                series: @json($series),
+                chart: {
+                    type: 'bar',
+                    height: 380,
+                    toolbar: {
+                        show: false
+                    }
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        columnWidth: '55%',
+                        borderRadius: 5,
+                        borderRadiusApplication: 'end'
+                    },
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    show: true,
+                    width: 2,
+                    colors: ['transparent']
+                },
+                xaxis: {
+                    categories: @json($categories)
+                },
+                yaxis: {
+                    title: {
+                        text: 'Jumlah'
+                    }
+                },
+                fill: {
+                    opacity: 1
+                },
+                tooltip: {
+                    y: {
+                        formatter: (val) => `${val} laporan`
+                    }
+                },
+                legend: {
+                    position: 'top'
+                }
+            };
+
+
             var chart = new ApexCharts(document.querySelector("#demojk"), optionsJK);
             var chartParts = new ApexCharts(document.querySelector("#parts-chart"), optionsParts);
+            var chartStatus = new ApexCharts(document.querySelector("#status-chart"), optionsStatus);
+
             chart.render();
             chartParts.render();
+            chartStatus.render();
         });
     </script>
 @endsection
@@ -176,6 +226,33 @@
             </div>
         </div>
         <!--/ Data Tables -->
+
+        <div class="col-xl-12 col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="mb-1">Status Aspirasi / Aduan</h5>
+                        {{-- filter start and end date --}}
+                        <form method="GET" action="{{ route('home') }}" class="d-flex">
+                            <input type="date" name="start_date" class="form-control form-control-sm me-2"
+                                value="{{ request('start_date') }}">
+                            <input type="date" name="end_date" class="form-control form-control-sm me-2"
+                                value="{{ request('end_date') }}">
+                            <select name="view_by" class="form-select form-select-sm me-2">
+                                <option value="week" {{ request('view_by') == 'week' ? 'selected' : '' }}>Mingguan
+                                </option>
+                                <option value="month" {{ request('view_by') == 'month' ? 'selected' : '' }}>Bulanan
+                                </option>
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-primary">Filter</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="card-body pt-lg-2">
+                    <div id="status-chart"></div>
+                </div>
+            </div>
+        </div>
 
         <!-- Weekly Overview Chart -->
         <div class="col-xl-4 col-md-6">

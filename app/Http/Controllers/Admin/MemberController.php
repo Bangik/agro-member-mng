@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Imports\MembersImport;
 use App\Models\Member;
 use App\Models\Part;
+use App\Models\Setting;
 use App\Models\TContract;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -224,12 +225,15 @@ class MemberController extends Controller
         $query->with('part')->orderBy('created_at', 'desc');
       }
     ])->where('id', $id)->firstOrFail();
+    $setting = Setting::first();
+
 
     return Pdf::loadView('content.global.pdf-profile', [
       'member' => $member,
       'employment' => $member->contracts->first(),
       'contracts' => $member->contracts,
-      'chairman_name' => 'Sutrisno',
+      'chairman_name' => $setting->union_chairman,
+      'chairman_reg_number' => $setting->union_reg_number,
     ])->setPaper('A4')
       ->stream('profile.pdf');
   }

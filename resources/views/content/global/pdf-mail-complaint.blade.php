@@ -173,7 +173,7 @@
         Saya yang bertandatangan dibawah ini menyampaikan aduan sebagai berikut:
     </div>
     <div style="margin-top:10px; margin-bottom:10px; padding:10px 8px; text-align:justify;">
-        {{ $complaint->title }}
+        Perihal: {{ $complaint->title }}
         <br>
         {{ e($complaint->complaint) }}
     </div>
@@ -187,7 +187,7 @@
             <td style="width:260px; text-align:center;">
                 <div class="place-date">
                     {{ v($signature_place ?? 'Jember') }},
-                    {{ isset($printed_at) ? \Carbon\Carbon::parse($printed_at)->translatedFormat('d F Y') : now()->translatedFormat('d F Y') }}
+                    {{ \Carbon\Carbon::parse($complaint->created_at)->translatedFormat('d F Y') }}
                 </div>
                 <div style="margin-top:50px; text-decoration:underline; font-weight: bold;" class="name">
                     {{ v($complaint->member->name ?? '________________________') }}

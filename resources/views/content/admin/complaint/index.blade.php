@@ -89,7 +89,7 @@
                                 @endif
                             </td>
                             <td>
-                                {{ $complaint->resolved_at ? \Carbon\Carbon::parse($complaint->resolved_at)->translatedFormat('d F Y') : '-' }}
+                                {{ $complaint->response_at ? \Carbon\Carbon::parse($complaint->response_at)->translatedFormat('d F Y') : '-' }}
                             </td>
                             <td>
                                 {{ $complaint->updated_at ? \Carbon\Carbon::parse($complaint->updated_at)->translatedFormat('d F Y') : '-' }}
@@ -108,9 +108,12 @@
                                             class="dropdown-item">
                                             <i class="ri-pencil-line me-1"></i>
                                             Response Aspirasi / Aduan</a>
-                                        <button class="dropdown-item button-swal" data-id="{{ $complaint->id }}"
-                                            data-name="{{ $complaint->title }}"><i class="ri-delete-bin-6-line me-1"></i>
-                                            Delete</button>
+                                        @if ($complaint->status !== 'resolved')
+                                            <button class="dropdown-item button-swal" data-id="{{ $complaint->id }}"
+                                                data-name="{{ $complaint->title }}"><i
+                                                    class="ri-delete-bin-6-line me-1"></i>
+                                                Delete</button>
+                                        @endif
                                     </div>
                                 </div>
                             </td>

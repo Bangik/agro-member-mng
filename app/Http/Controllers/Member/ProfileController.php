@@ -96,12 +96,14 @@ class ProfileController extends Controller
         $query->with('part')->orderBy('created_at', 'desc');
       }
     ])->where('m_user_id', Auth::user()->id)->firstOrFail();
+    $setting = Setting::first();
 
     return Pdf::loadView('content.global.pdf-profile', [
       'member' => $member,
       'employment' => $member->contracts->first(),
       'contracts' => $member->contracts,
-      'chairman_name' => 'Sutrisno',
+      'chairman_name' => $setting->union_chairman,
+      'chairman_reg_number' => $setting->union_reg_number,
     ])->setPaper('A4')
       ->stream('profile.pdf');
   }

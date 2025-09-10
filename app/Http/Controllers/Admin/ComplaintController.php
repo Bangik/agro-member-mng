@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\ChangeStatusToSolvedJob;
 use App\Models\TComplaint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,15 +44,16 @@ class ComplaintController extends Controller
   {
     $request->validate([
       'response' => 'required|string',
-      'resolved_at' => 'required|date',
+      'response_at' => 'required|date',
     ]);
 
     $complaint = TComplaint::findOrFail($id);
     $complaint->response = $request->response;
-    $complaint->resolved_at = $request->resolved_at;
-    $complaint->status = 'resolved';
+    $complaint->response_at = $request->response_at;
     $complaint->m_user_id = Auth::user()->id;
     $complaint->save();
+
+    dispatch(new ChangeStatusToSolvedJob($complaint))->delay(now()->addDays(7));
 
     return redirect()->route('admin.complaints.index')->with('success', 'Aspirasi / Aduan berhasil diperbarui.');
   }

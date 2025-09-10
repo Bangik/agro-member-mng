@@ -53,7 +53,20 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="union_chairman" class="form-label">Nama Ketua Serikat</label>
+                                <input type="text" class="form-control" id="union_chairman" name="union_chairman"
+                                    value="{{ old('union_chairman', $setting->union_chairman) }}" required />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="union_reg_number" class="form-label">Nomor Registrasi Ketua Serikat</label>
+                                <input type="text" class="form-control" id="union_reg_number" name="union_reg_number"
+                                    value="{{ old('union_reg_number', $setting->union_reg_number) }}" required />
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Simpan</button>
                     </form>
                 </div>
             </div>

@@ -18,7 +18,11 @@ Auth::routes([
   'register' => false,
 ]);
 
-Route::prefix('admin')->middleware(['auth'])->group(function () {
+Route::get('/', function () {
+  return view('content.global.index');
+})->name('landing');
+
+Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
   Route::prefix('members')->group(function () {
     Route::get('/', [MemberController::class, 'index'])->name('admin.members.index');
@@ -70,12 +74,14 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
   });
 });
 
-Route::prefix('member')->middleware(['auth'])->group(function () {
+Route::prefix('member')->middleware(['auth', 'member'])->group(function () {
   Route::prefix('complaints')->group(function () {
     Route::get('/', [MemberComplaintController::class, 'index'])->name('member.complaints.index');
     Route::post('/', [MemberComplaintController::class, 'store'])->name('member.complaints.store');
+    Route::get('/{id}/detail', [MemberComplaintController::class, 'detail'])->name('member.complaints.detail');
     Route::get('/{id}/detail/pdf', [MemberComplaintController::class, 'generatePdf'])->name('member.complaints.detail.pdf');
     Route::put('/{id}', [MemberComplaintController::class, 'update'])->name('member.complaints.update');
+    Route::put('/{id}/status', [MemberComplaintController::class, 'updateStatus'])->name('member.complaints.update.status');
     Route::delete('/{id}', [MemberComplaintController::class, 'destroy'])->name('member.complaints.destroy');
   });
 

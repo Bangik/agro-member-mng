@@ -19,6 +19,7 @@ return new class extends Migration
       $table->string('title');
       $table->text('complaint');
       $table->text('response')->nullable();
+      $table->date('response_at')->nullable();
       $table->date('resolved_at')->nullable();
       $table->enum('status', ['pending', 'in_progress', 'resolved'])->default('pending');
       $table->softDeletes();

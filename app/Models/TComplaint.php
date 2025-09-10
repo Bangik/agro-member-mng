@@ -20,6 +20,7 @@ class TComplaint extends Model
     'title',
     'complaint',
     'response',
+    'response_at',
     'resolved_at',
     'status',
   ];

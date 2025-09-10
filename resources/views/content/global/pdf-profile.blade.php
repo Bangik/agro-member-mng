@@ -249,7 +249,7 @@
             <td>{{ v($member->reg_number ?? ($member['reg_number'] ?? null)) }}</td>
             <td class="photo-cell" rowspan="8">
                 <img class="id-photo"
-                    src="{{ $member->pp_file ? public_path('storage/member/' . $member->pp_file) : public_path('assets/img/avatars/8.png') }}"
+                    src="{{ $member->pp_file ? public_path('storage/member/' . $member->pp_file) : public_path('assets/img/avatars/1.png') }}"
                     alt="Foto 3x4" />
             </td>
         </tr>
@@ -435,7 +435,7 @@
                     <div style="margin-top:50px; text-decoration:underline; font-weight: bold;" class="name">
                         {{ v($chairman_name ?? '________________________') }}
                     </div>
-                    <div>Nomor Anggota: {{ v($member->reg_number ?? ($member['reg_number'] ?? '—')) }}</div>
+                    <div>Nomor Anggota: {{ v($chairman_reg_number ?? '—') }}</div>
                 </td>
             </tr>
         </table>

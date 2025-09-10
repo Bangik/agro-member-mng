@@ -52,6 +52,8 @@ class DatabaseSeeder extends Seeder
       'kta_file_now' => 'default.png',
       'kta_back_path_now' => '/kta',
       'kta_back_file_now' => 'default.png',
+      'union_chairman' => 'John Doe',
+      'union_reg_number' => '1234567890',
     ]);
   }
 }

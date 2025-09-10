@@ -25,6 +25,7 @@ class TComplaintFactory extends Factory
       'title' => $this->faker->sentence(),
       'complaint' => $this->faker->text(),
       'response' => $this->faker->text(),
+      'response_at' => $this->faker->date(),
       'resolved_at' => $this->faker->date(),
       'status' => $this->faker->randomElement(['pending', 'in_progress', 'resolved']),
     ];

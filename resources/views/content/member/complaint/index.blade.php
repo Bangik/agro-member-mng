@@ -56,7 +56,7 @@
                                 @endif
                             </td>
                             <td>
-                                {{ $complaint->resolved_at ? \Carbon\Carbon::parse($complaint->resolved_at)->translatedFormat('d F Y') : '-' }}
+                                {{ $complaint->response_at ? \Carbon\Carbon::parse($complaint->response_at)->translatedFormat('d F Y') : '-' }}
                             </td>
                             <td>{{ $complaint->user ? $complaint->user->name : '-' }}</td>
                             <td>
@@ -68,13 +68,20 @@
                                             class="dropdown-item" target="_blank">
                                             <i class="ri-file-download-line me-1"></i>
                                             Download PDF</a>
-                                        <button class="dropdown-item" data-bs-toggle="modal"
-                                            data-bs-target="#modalEdit{{ $complaint->id }}">
-                                            <i class="ri-pencil-line me-1"></i>
-                                            Edit</button>
-                                        <button class="dropdown-item button-swal" data-id="{{ $complaint->id }}"
-                                            data-name="{{ $complaint->title }}"><i class="ri-delete-bin-6-line me-1"></i>
-                                            Delete</button>
+                                        <a href="{{ route('member.complaints.detail', $complaint->id) }}"
+                                            class="dropdown-item">
+                                            <i class="ri-eye-line me-1"></i>
+                                            Detail</a>
+                                        @if ($complaint->status !== 'resolved')
+                                            <button class="dropdown-item" data-bs-toggle="modal"
+                                                data-bs-target="#modalEdit{{ $complaint->id }}">
+                                                <i class="ri-pencil-line me-1"></i>
+                                                Edit</button>
+                                            <button class="dropdown-item button-swal" data-id="{{ $complaint->id }}"
+                                                data-name="{{ $complaint->title }}"><i
+                                                    class="ri-delete-bin-6-line me-1"></i>
+                                                Delete</button>
+                                        @endif
                                     </div>
                                 </div>
                             </td>

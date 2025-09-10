@@ -198,6 +198,60 @@
                 </div>
             </div>
             <!-- /Invoice table -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <h5 class="card-title m-0 me-2">Overview Aspirasi / Aduan</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row g-6">
+                        <div class="col-md-4 col-6">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar">
+                                    <div class="avatar-initial bg-warning rounded shadow-xs">
+                                        <i class="ri-pie-chart-2-line ri-24px"></i>
+                                    </div>
+                                </div>
+                                <div class="ms-3">
+                                    <a href="{{ route('admin.complaints.index') . '?status=pending' }}"
+                                        class="mb-0 text-warning">Belum
+                                        Ditindaklanjuti</a>
+                                    <h5 class="mb-0">{{ $complaintPending }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-6">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar">
+                                    <div class="avatar-initial bg-info rounded shadow-xs">
+                                        <i class="ri-group-line ri-24px"></i>
+                                    </div>
+                                </div>
+                                <div class="ms-3">
+                                    <a href="{{ route('admin.complaints.index') . '?status=in_progress' }}"
+                                        class="mb-0 text-info">Proses</a>
+                                    <h5 class="mb-0">{{ $complaintInProgress }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-6">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar">
+                                    <div class="avatar-initial bg-success rounded shadow-xs">
+                                        <i class="ri-check-line ri-24px"></i>
+                                    </div>
+                                </div>
+                                <div class="ms-3">
+                                    <a href="{{ route('admin.complaints.index') . '?status=resolved' }}"
+                                        class="mb-0">Sudah Ditindaklanjuti</a>
+                                    <h5 class="mb-0">{{ $complaintResolved }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!--/ User Content -->
     </div>

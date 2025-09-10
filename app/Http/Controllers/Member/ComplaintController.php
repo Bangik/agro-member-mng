@@ -42,6 +42,12 @@ class ComplaintController extends Controller
     return redirect()->back()->with('success', 'Aspirasi / Aduan berhasil dikirim.');
   }
 
+  public function detail($id)
+  {
+    $complaint = TComplaint::with('member', 'user')->findOrFail($id);
+    return view('content.member.complaint.detail', compact('complaint'));
+  }
+
   public function generatePdf($id)
   {
     $complaint = TComplaint::with('member', 'user')->findOrFail($id);
@@ -66,6 +72,21 @@ class ComplaintController extends Controller
     ]);
 
     return redirect()->back()->with('success', 'Aspirasi / Aduan berhasil diperbarui.');
+  }
+
+  public function updateStatus(Request $request, $id)
+  {
+    $validated = $request->validate([
+      'status' => 'required|in:resolved',
+    ]);
+
+    $member = Member::where('m_user_id', Auth::id())->firstOrFail();
+    $complaint = TComplaint::where('id', $id)->where('m_member_id', $member->id)->firstOrFail();
+    $complaint->update([
+      'status' => $validated['status'],
+    ]);
+
+    return redirect()->back()->with('success', 'Status aspirasi / aduan berhasil diperbarui.');
   }
 
   public function destroy($id)

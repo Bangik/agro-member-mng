@@ -21,6 +21,8 @@ class SettingController extends Controller
     $request->validate([
       'kta_file_now' => 'required|file|mimes:jpg,jpeg,png|max:2048',
       'kta_file_back_now' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
+      'union_chairman' => 'nullable|string|max:255',
+      'union_reg_number' => 'nullable|string|max:255',
     ]);
 
     $setting = Setting::findOrFail($id);
@@ -44,6 +46,9 @@ class SettingController extends Controller
       $setting->kta_back_file_now = FileHelper::storeFile($request->file('kta_file_back_now'), '/kta');
       $setting->kta_back_path_now = '/kta';
     }
+
+    $setting->union_chairman = $request->union_chairman;
+    $setting->union_reg_number = $request->union_reg_number;
 
     $setting->save();
 

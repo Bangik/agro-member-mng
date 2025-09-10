@@ -21,6 +21,8 @@ class Setting extends Model
     'kta_back_file_before',
     'kta_back_path_now',
     'kta_back_file_now',
+    'union_chairman',
+    'union_reg_number',
   ];
 
   public function ktaBeforeUrl()
