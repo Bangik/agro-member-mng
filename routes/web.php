@@ -22,6 +22,10 @@ Route::get('/', function () {
   return view('content.global.index');
 })->name('landing');
 
+Route::get('/profile', function () {
+  return view('content.global.profile');
+})->name('profile');
+
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
   Route::prefix('members')->group(function () {

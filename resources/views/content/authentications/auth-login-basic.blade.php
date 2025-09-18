@@ -68,9 +68,9 @@
                                         Remember Me
                                     </label>
                                 </div>
-                                <a href="{{ route('password.request') }}" class="float-end mb-1">
+                                {{-- <a href="{{ route('password.request') }}" class="float-end mb-1">
                                     <span>Forgot Password?</span>
-                                </a>
+                                </a> --}}
                             </div>
                             <div class="mb-5">
                                 <button class="btn btn-primary d-grid w-100" type="submit">login</button>

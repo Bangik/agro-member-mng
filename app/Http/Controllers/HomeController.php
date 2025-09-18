@@ -137,7 +137,12 @@ class HomeController extends Controller
         'complaintResolved',
       ));
     } else {
-      $member = Member::where('m_user_id', Auth::user()->id)->first();
+      $member = Member::with('contracts')->where('m_user_id', Auth::user()->id)->first();
+
+      if ($member->contracts->where('end_date', '>=', now()->format('Y-m-d'))->count() > 0) {
+        abort(403, 'Anda bukan anggota aktif. Silakan hubungi admin untuk memperbarui status keanggotaan Anda.');
+      }
+
       $contracts = TContract::query()
         ->with('part')
         ->where('m_member_id', $member->id)
