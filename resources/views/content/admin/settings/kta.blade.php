@@ -148,7 +148,7 @@
             class="kta__photo_img">
     </div>
     <div class="kta__field kta__name">{{ $member ? $member->name : 'Nama' }}</div>
-    <div class="kta__field kta__part">{{ $member ? $member->contracts->first()->part->name : 'Bagian/Divisi' }}</div>
+    <div class="kta__field kta__part">{{ $member ? $member->contracts->first()->part : 'Bagian/Divisi' }}</div>
     <div class="kta__field kta__number">{{ $member ? $member->reg_number : 'Nomor Anggota' }}</div>
     <div class="kta__field kta__address">{{ $member ? $member->address : 'Alamat' }}</div>
     <div class="kta__field kta__phone_number">{{ $member ? $member->phone : 'Nomor HP' }}</div>

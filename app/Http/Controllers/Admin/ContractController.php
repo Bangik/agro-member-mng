@@ -12,7 +12,7 @@ class ContractController extends Controller
   {
     $validated = $request->validate([
       'm_member_id' => ['required', 'exists:m_member,id'],
-      'm_part_id'     => ['required', 'exists:m_part,id'],
+      'part'     => ['required', 'string'],
       'contract_number' => ['required', 'string', 'max:255'],
       'start_date'   => ['required', 'date'],
       'end_date'   => ['required', 'date', 'after:start_date'],

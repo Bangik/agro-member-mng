@@ -18,7 +18,7 @@ class TContractFactory extends Factory
   {
     return [
       'm_member_id' => \App\Models\Member::inRandomOrder()->first()->id,
-      'm_part_id' => \App\Models\Part::inRandomOrder()->first()->id,
+      'part' => \App\Models\Part::inRandomOrder()->first()->name,
       'contract_number' => $this->faker->unique()->numerify('CONTRACT-#####'),
       'start_date' => $this->faker->date(),
       'end_date' => $this->faker->date(),

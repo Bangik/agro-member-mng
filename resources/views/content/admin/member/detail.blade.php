@@ -183,7 +183,7 @@
                                             {{ \Carbon\Carbon::parse($contract->end_date)->format('d M Y') }}
                                         </td>
                                         <td>
-                                            {{ $contract->part->name }}
+                                            {{ $contract->part }}
                                         </td>
                                     </tr>
                                 @endforeach
@@ -239,13 +239,13 @@
                             </div>
                             <div class="col-md-12 mb-2">
                                 <div class="form-floating form-floating-outline">
-                                    <select id="m_part_id" class="form-select" name="m_part_id" required>
+                                    <select id="part" class="form-select" name="part" required>
                                         <option value="">Pilih Bagian</option>
                                         @foreach ($parts as $part)
-                                            <option value="{{ $part->id }}">{{ $part->name }}</option>
+                                            <option value="{{ $part->name }}">{{ $part->name }}</option>
                                         @endforeach
                                     </select>
-                                    <label for="m_part_id">Bagian</label>
+                                    <label for="part">Bagian</label>
                                 </div>
                             </div>
                         </div>

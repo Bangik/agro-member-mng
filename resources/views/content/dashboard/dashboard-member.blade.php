@@ -181,7 +181,7 @@
                                             {{ \Carbon\Carbon::parse($contract->end_date)->format('d M Y') }}
                                         </td>
                                         <td>
-                                            {{ $contract->part->name }}
+                                            {{ $contract->part }}
                                         </td>
                                     </tr>
                                 @endforeach

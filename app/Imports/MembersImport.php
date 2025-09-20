@@ -73,7 +73,7 @@ class MembersImport implements ToCollection
       $contracts[] = [
         'id'                  => Str::uuid()->toString(),
         'm_member_id'           => $memberId,
-        'm_part_id'           => $parts->where('name', $row[23])->first()->id ?? null,
+        'part'           => $parts->where('name', $row[23])->first()->name ?? null,
 
         'contract_number'     => $row[20],
         'start_date'         => !empty($row[21]) ? \Carbon\Carbon::parse($row[21])->format('Y-m-d') : null,

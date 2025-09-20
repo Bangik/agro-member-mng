@@ -14,9 +14,8 @@ return new class extends Migration
     Schema::create('t_contract', function (Blueprint $table) {
       $table->uuid('id')->primary();
       $table->uuid('m_member_id');
-      $table->uuid('m_part_id');
+      $table->string('part');
       $table->foreign('m_member_id')->references('id')->on('m_member')->onDelete('cascade');
-      $table->foreign('m_part_id')->references('id')->on('m_part')->onDelete('cascade');
       $table->string('contract_number')->nullable();
       $table->date('start_date')->nullable();
       $table->date('end_date')->nullable();

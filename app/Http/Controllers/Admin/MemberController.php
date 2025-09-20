@@ -94,7 +94,7 @@ class MemberController extends Controller
       'hobbies'            => ['nullable', 'string', 'max:255'],
       'photo'              => ['nullable', 'image', 'max:2048'],
 
-      'm_part_id'          => ['nullable', 'exists:m_part,id'],
+      'part'               => ['nullable', 'string'],
       'contract_number'    => ['required', 'string', 'max:255'],
       'active_date'        => ['required', 'date'],
       'off_date'           => ['required', 'date', 'after_or_equal:active_date'],
@@ -126,7 +126,7 @@ class MemberController extends Controller
       $member = Member::create($validated);
       TContract::create([
         'm_member_id'   => $member->id,
-        'm_part_id'     => $validated['m_part_id'],
+        'part'     => $validated['part'],
         'contract_number' => $validated['contract_number'],
         'start_date'   => $validated['active_date'],
         'end_date'      => $validated['off_date'],
@@ -229,7 +229,6 @@ class MemberController extends Controller
     $member = Member::withTrashed()->findOrFail($id);
     $contracts = TContract::query()
       ->withTrashed()
-      ->with('part')
       ->where('m_member_id', $id)
       ->latest()
       ->paginate(10)
@@ -246,7 +245,6 @@ class MemberController extends Controller
         'contracts' => function ($query) {
           $query
             ->withTrashed()
-            ->with('part')
             ->orderBy('created_at', 'desc');
         }
       ])

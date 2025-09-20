@@ -15,7 +15,7 @@ class TContract extends Model
 
   protected $fillable = [
     'm_member_id',
-    'm_part_id',
+    'part',
     'contract_number',
     'start_date',
     'end_date',
@@ -24,10 +24,5 @@ class TContract extends Model
   public function member()
   {
     return $this->belongsTo(Member::class, 'm_member_id');
-  }
-
-  public function part()
-  {
-    return $this->belongsTo(Part::class, 'm_part_id');
   }
 }

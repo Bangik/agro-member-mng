@@ -157,13 +157,15 @@ class HomeController extends Controller
       }
 
       // Contoh chart lain yang tidak terkait member (biarkan seperti semula)
-      $rows = Part::query()
-        ->leftJoin('t_contract as c', 'c.m_part_id', '=', 'm_part.id')
-        ->select('m_part.name', DB::raw('COUNT(c.id) as total'))
-        ->groupBy('m_part.id', 'm_part.name')
-        ->orderBy('m_part.name')
+      $rows = DB::table('t_contract')
+        ->selectRaw('TRIM(part) AS name, COUNT(*) AS total')
+        ->whereNotNull('part')
+        ->whereRaw("TRIM(part) <> ''")
+        ->groupBy('name')
+        ->orderBy('name')
         ->get()
-        ->map(fn($r) => ['x' => $r->name, 'y' => (int)$r->total]);
+        ->map(fn($r) => ['x' => $r->name, 'y' => (int) $r->total]);
+
 
       return view('content.dashboard.dashboards-analytics', compact(
         'complaints',
@@ -185,7 +187,6 @@ class HomeController extends Controller
       }
 
       $contracts = TContract::query()
-        ->with('part')
         ->where('m_member_id', $member->id)
         ->latest()
         ->paginate(10)

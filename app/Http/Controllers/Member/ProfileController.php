@@ -102,7 +102,7 @@ class ProfileController extends Controller
   {
     $member = Member::with([
       'contracts' => function ($query) {
-        $query->with('part')->orderBy('created_at', 'desc');
+        $query->orderBy('created_at', 'desc');
       }
     ])->where('m_user_id', Auth::user()->id)->firstOrFail();
     $setting = Setting::first();
@@ -119,7 +119,7 @@ class ProfileController extends Controller
 
   public function printKTA()
   {
-    $member = Member::with('contracts.part')->where('m_user_id', Auth::user()->id)->firstOrFail();
+    $member = Member::with('contracts')->where('m_user_id', Auth::user()->id)->firstOrFail();
     $setting = Setting::first();
     return view('content.admin.settings.kta', compact('member', 'setting'));
   }

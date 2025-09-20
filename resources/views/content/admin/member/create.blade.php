@@ -309,18 +309,18 @@
 
                             <div class="col-md-6">
                                 <div class="form-floating form-floating-outline">
-                                    <select class="form-select @error('m_part_id') is-invalid @enderror" id="m_part_id"
-                                        name="m_part_id">
+                                    <select class="form-select @error('part') is-invalid @enderror" id="part"
+                                        name="part">
                                         <option value="" disabled selected>Pilih Bagian</option>
                                         @foreach ($parts as $part)
-                                            <option value="{{ $part->id }}"
-                                                {{ old('m_part_id') === $part->id ? 'selected' : '' }}>
+                                            <option value="{{ $part->name }}"
+                                                {{ old('part') === $part->name ? 'selected' : '' }}>
                                                 {{ $part->name }}
                                             </option>
                                         @endforeach
                                     </select>
-                                    <label for="m_part_id">Bagian</label>
-                                    @error('m_part_id')
+                                    <label for="part">Bagian</label>
+                                    @error('part')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>

@@ -335,7 +335,7 @@
     <table class="grid">
         <tr>
             <th>Divisi / Bagian</th>
-            <td>{{ v($employment->part->name ?? null) }}</td>
+            <td>{{ v($employment->part ?? null) }}</td>
         </tr>
         <tr>
             <th>Status Kerja</th>
@@ -407,7 +407,7 @@
                                 ? \Carbon\Carbon::parse($c['end_date'] ?? $c->end_date)->translatedFormat('d F Y')
                                 : '—' }}
                         </td>
-                        <td>{{ v($c['part']['name'] ?? ($c->part->name ?? null)) }}</td>
+                        <td>{{ v($c['part'] ?? ($c->part ?? null)) }}</td>
                     </tr>
                 @empty
                     @for ($r = 1; $r <= 4; $r++)
