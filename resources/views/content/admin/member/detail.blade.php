@@ -163,6 +163,7 @@
                                     <th>In</th>
                                     <th>Out</th>
                                     <th>Bagian</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -184,6 +185,12 @@
                                         </td>
                                         <td>
                                             {{ $contract->part }}
+                                        </td>
+                                        <td>
+                                            <button class="dropdown-item" data-bs-toggle="modal"
+                                                data-bs-target="#modalEdit{{ $contract->id }}">
+                                                <i class="ri-pencil-line me-1"></i>
+                                                Edit</button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -218,34 +225,59 @@
                         <div class="row g-4">
                             <div class="col-md-12 mb-2">
                                 <div class="form-floating form-floating-outline">
-                                    <input type="text" id="contract_number" class="form-control"
-                                        name="contract_number" placeholder="Nomor Kontrak" required>
+                                    <input type="text" id="contract_number"
+                                        class="form-control @error('contract_number') is-invalid @enderror"
+                                        name="contract_number" placeholder="Nomor Kontrak" required
+                                        value="{{ old('contract_number') }}">
                                     <label for="contract_number">Nomor Kontrak</label>
+                                    @error('contract_number')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="col-md-12 mb-2">
                                 <div class="form-floating form-floating-outline">
-                                    <input type="date" id="start_date" class="form-control" name="start_date"
-                                        placeholder="In" required>
+                                    <input type="date" id="start_date"
+                                        class="form-control @error('start_date') is-invalid @enderror" placeholder="In"
+                                        required>
                                     <label for="start_date">In</label>
+                                    @error('start_date')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="col-md-12 mb-2">
                                 <div class="form-floating form-floating-outline">
-                                    <input type="date" id="end_date" class="form-control" name="end_date"
+                                    <input type="date" id="end_date"
+                                        class="form-control @error('end_date') is-invalid @enderror" name="end_date"
                                         placeholder="Out" required>
                                     <label for="end_date">Out</label>
+                                    @error('end_date')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="col-md-12 mb-2">
                                 <div class="form-floating form-floating-outline">
-                                    <select id="part" class="form-select" name="part" required>
+                                    <select id="part" class="form-select @error('part') is-invalid @enderror"
+                                        name="part" required>
                                         <option value="">Pilih Bagian</option>
                                         @foreach ($parts as $part)
                                             <option value="{{ $part->name }}">{{ $part->name }}</option>
                                         @endforeach
                                     </select>
                                     <label for="part">Bagian</label>
+                                    @error('part')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -258,4 +290,67 @@
             </div>
         </div>
     </div>
+
+    {{-- modal edit --}}
+    @foreach ($contracts as $contract)
+        <div class="modal fade" id="modalEdit{{ $contract->id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalCenterTitle">Edit Kontrak</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('admin.contracts.update', $contract->id) }}" method="POST">
+                        <div class="modal-body">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="m_member_id" value="{{ $member->id }}">
+                            <div class="row g-4">
+                                <div class="col-md-12 mb-2">
+                                    <div class="form-floating form-floating-outline">
+                                        <input type="text" id="contract_number" class="form-control"
+                                            name="contract_number" placeholder="Nomor Kontrak" required
+                                            value="{{ $contract->contract_number }}">
+                                        <label for="contract_number">Nomor Kontrak</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-2">
+                                    <div class="form-floating form-floating-outline">
+                                        <input type="date" id="start_date" class="form-control" name="start_date"
+                                            placeholder="In" required value="{{ $contract->start_date }}">
+                                        <label for="start_date">In</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-2">
+                                    <div class="form-floating form-floating-outline">
+                                        <input type="date" id="end_date" class="form-control" name="end_date"
+                                            placeholder="Out" required value="{{ $contract->end_date }}">
+                                        <label for="end_date">Out</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-2">
+                                    <div class="form-floating form-floating-outline">
+                                        <select id="part" class="form-select" name="part" required>
+                                            <option value="">Pilih Bagian</option>
+                                            @foreach ($parts as $part)
+                                                <option value="{{ $part->name }}"
+                                                    {{ $part->name === $contract->part ? 'selected' : '' }}>
+                                                    {{ $part->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        <label for="part">Bagian</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary"
+                                data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endforeach
 @endsection

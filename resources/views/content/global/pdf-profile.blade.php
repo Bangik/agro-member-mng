@@ -323,7 +323,7 @@
         </tr>
         <tr>
             <th>Status Menikah</th>
-            <td>{{ v($member->is_married ?? ($member['is_mariried'] ?? null)) }}</td>
+            <td>{{ v($member->is_married ? 'Menikah' : 'Belum Menikah') }}</td>
         </tr>
         <tr>
             <th>Hobi</th>

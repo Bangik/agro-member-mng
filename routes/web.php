@@ -60,6 +60,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
   Route::prefix('contracts')->group(function () {
     Route::post('/', [ContractController::class, 'store'])->name('admin.contracts.store');
+    Route::put('/{id}', [ContractController::class, 'update'])->name('admin.contracts.update');
   });
 
   // Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
