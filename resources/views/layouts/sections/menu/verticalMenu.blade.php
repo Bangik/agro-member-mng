@@ -4,7 +4,8 @@
     <div class="app-brand demo">
         <a href="{{ url('/') }}" class="app-brand-link">
             <span class="app-brand-logo demo me-1">
-                @include('_partials.macros', ['height' => 20])
+                {{-- @include('_partials.macros', ['height' => 20]) --}}
+                <img src="{{ $setting->unionLogoUrl() }}" alt="Logo" class="img-fluid" height="30" width="30" />
             </span>
             <span class="app-brand-text demo menu-text fw-semibold ms-2">{{ config('variables.templateName') }}</span>
         </a>
@@ -65,7 +66,8 @@
                             @endisset
                             <div>{{ isset($menu->name) ? __($menu->name) : '' }}</div>
                             @isset($menu->badge)
-                                <div class="badge bg-{{ $menu->badge[0] }} rounded-pill ms-auto">{{ $menu->badge[1] }}</div>
+                                <div class="badge bg-{{ $menu->badge[0] }} rounded-pill ms-auto">{{ $menu->badge[1] }}
+                                </div>
                             @endisset
                         </a>
 

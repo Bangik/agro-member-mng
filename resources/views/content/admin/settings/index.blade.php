@@ -39,18 +39,41 @@
                         @method('PUT')
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <label for="kta_file_now" class="form-label">Unggah KTA Depan Baru</label>
+                                <label for="kta_file_now"
+                                    class="form-label @error('kta_file_now') is-invalid @enderror">Unggah KTA Depan
+                                    Baru</label>
                                 <input class="form-control" type="file" id="kta_file_now" name="kta_file_now"
                                     accept="image/*" />
                             </div>
+                            @error('kta_file_now')
+                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
                         </div>
 
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <label for="kta_file_back_now" class="form-label">Unggah KTA Belakang Baru</label>
+                                <label for="kta_file_back_now"
+                                    class="form-label @error('kta_file_back_now') is-invalid @enderror">Unggah KTA Belakang
+                                    Baru</label>
                                 <input class="form-control" type="file" id="kta_file_back_now" name="kta_file_back_now"
                                     accept="image/*" />
                             </div>
+                            @error('kta_file_back_now')
+                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="union_logo_file"
+                                    class="form-label @error('union_logo_file') is-invalid @enderror">Unggah
+                                    Logo</label>
+                                <input class="form-control" type="file" id="union_logo_file" name="union_logo_file"
+                                    accept="image/*" />
+                            </div>
+                            @error('union_logo_file')
+                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
                         </div>
 
                         <div class="row">

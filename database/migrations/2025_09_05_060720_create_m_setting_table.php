@@ -25,6 +25,9 @@ return new class extends Migration
 
       $table->string('union_chairman')->nullable();
       $table->string('union_reg_number')->nullable();
+
+      $table->string('union_logo_path')->nullable();
+      $table->string('union_logo_file')->nullable();
       $table->timestamps();
     });
   }

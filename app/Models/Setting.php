@@ -23,6 +23,8 @@ class Setting extends Model
     'kta_back_file_now',
     'union_chairman',
     'union_reg_number',
+    'union_logo_path',
+    'union_logo_file',
   ];
 
   public function ktaBeforeUrl()
@@ -43,5 +45,10 @@ class Setting extends Model
   public function ktaBackNowUrl()
   {
     return $this->kta_back_path_now ? FileHelper::get($this->kta_back_path_now, $this->kta_back_file_now) : null;
+  }
+
+  public function unionLogoUrl()
+  {
+    return $this->union_logo_path ? FileHelper::get($this->union_logo_path, $this->union_logo_file) : null;
   }
 }
