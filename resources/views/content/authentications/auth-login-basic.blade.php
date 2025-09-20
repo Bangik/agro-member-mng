@@ -29,11 +29,11 @@
                         <form id="formAuthentication" class="mb-5" method="POST" action="{{ route('login') }}">
                             @csrf
                             <div class="form-floating form-floating-outline mb-5">
-                                <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                    id="email" name="email" placeholder="Enter your email" value="{{ old('email') }}"
-                                    required autofocus>
-                                <label for="email">Email</label>
-                                @error('email')
+                                <input type="login" class="form-control @error('login') is-invalid @enderror"
+                                    id="login" name="login" placeholder="Masukkan email atau nomor induk"
+                                    value="{{ old('login') }}" required autofocus>
+                                <label for="login">Masukkan email atau nomor induk</label>
+                                @error('login')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

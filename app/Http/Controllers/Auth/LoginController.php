@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Login Controller
     |--------------------------------------------------------------------------
@@ -18,28 +19,49 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
+  use AuthenticatesUsers;
 
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/home';
+  /**
+   * Where to redirect users after login.
+   *
+   * @var string
+   */
+  protected $redirectTo = '/home';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
-        $this->middleware('auth')->only('logout');
-    }
+  /**
+   * Create a new controller instance.
+   *
+   * @return void
+   */
+  public function __construct()
+  {
+    $this->middleware('guest')->except('logout');
+    $this->middleware('auth')->only('logout');
+  }
 
   public function showLoginForm()
   {
     return view('content.authentications.auth-login-basic');
+  }
+
+  public function username()
+  {
+    return 'login'; // kita pakai field "login" (bisa email atau reg_number)
+  }
+
+  /**
+   * Custom credentials logic.
+   */
+  protected function credentials(Request $request)
+  {
+    $login = $request->get($this->username());
+
+    // Cek apakah input valid email
+    $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'reg_number';
+
+    return [
+      $field    => $login,
+      'password' => $request->get('password'),
+    ];
   }
 }

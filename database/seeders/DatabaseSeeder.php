@@ -21,7 +21,11 @@ class DatabaseSeeder extends Seeder
     Part::factory(10)->create();
 
     User::factory(100)->create()->each(function ($user) {
-      Member::factory()->create(['m_user_id' => $user->id]);
+      Member::factory()->create([
+        'email' => $user->email,
+        'reg_number' => $user->reg_number,
+        'm_user_id' => $user->id
+      ]);
     });
 
     User::factory()->create([

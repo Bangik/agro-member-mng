@@ -113,6 +113,29 @@
 
 @section('content')
     <div class="row gy-6">
+        <div class="col-xl-12 col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="mb-1">Filter berdasarkan status member</h5>
+                        {{-- filter start and end date --}}
+                        <form method="GET" action="{{ route('home') }}" class="d-flex">
+                            <select name="member_status" class="form-select form-select-sm me-2">
+                                <option value="all" {{ request('member_status') == 'all' ? 'selected' : '' }}>Semua
+                                </option>
+                                <option value="active" {{ request('member_status') == 'active' ? 'selected' : '' }}>Aktif
+                                </option>
+                                <option value="inactive" {{ request('member_status') == 'inactive' ? 'selected' : '' }}>
+                                    Tidak
+                                    Aktif
+                                </option>
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-primary">Filter</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Transactions -->
         <div class="col-lg-12">
             <div class="card h-100">
@@ -120,7 +143,8 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <h5 class="card-title m-0 me-2">Overview Aspirasi / Aduan</h5>
                     </div>
-                    <p class="small mb-0"><span class="h6 mb-0">Total {{ $totalComplaintsThisMonth }}</span> Aspirasi / Aduan
+                    <p class="small mb-0"><span class="h6 mb-0">Total {{ $totalComplaintsThisMonth }}</span> Aspirasi /
+                        Aduan
                         bulan ini
                     </p>
                 </div>

@@ -23,7 +23,7 @@
                 <img src="{{ asset('assets/img/illustrations/404.png') }}" alt="misc-error" class="misc-model img-fluid z-1"
                     width="780">
                 <div>
-                    <a href="{{ url('/') }}" class="btn btn-primary text-center my-6">Back to home</a>
+                    <a href="{{ route('home') }}" class="btn btn-primary text-center my-6">Back to home</a>
                 </div>
             </div>
         </div>

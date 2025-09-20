@@ -32,7 +32,11 @@ class HomeController extends Controller
   public function index(Request $request)
   {
 
+    // $memberStatus = $request->input('member_status', 'all');
+
     if (Auth::user()->role === 'admin' || Auth::user()->role === 'superadmin') {
+      $memberStatus = $request->input('member_status', 'all');
+
       $currentMonth = now()->month;
       $end  = $request->filled('end_date')
         ? Carbon::parse($request->input('end_date'))->endOfDay()
@@ -44,13 +48,45 @@ class HomeController extends Controller
 
       $viewBy = in_array($request->input('view_by'), ['month', 'week']) ? $request->input('view_by') : 'month';
 
-      $complaints = TComplaint::with('member')->latest()->take(10)->get();
-      $totalComplaintsThisMonth = TComplaint::whereMonth('created_at', $currentMonth)->count();
-      $maleCount = Member::where('gender', 'male')->count();
-      $femaleCount = Member::where('gender', 'female')->count();
-      $complaintPending = TComplaint::where('status', 'pending')->count();
-      $complaintInProgress = TComplaint::where('status', 'in_progress')->count();
-      $complaintResolved = TComplaint::where('status', 'resolved')->count();
+      // === BASE FILTER (tanpa mengubah logic existing) ===
+      $today = now()->toDateString();
+
+      // Base query untuk keluhan, ter-filter status member
+      $complaintQ = fn() => TComplaint::query()
+        ->when(
+          $memberStatus === 'active',
+          fn($q) =>
+          $q->whereHas('member.contracts', fn($c) => $c->where('end_date', '>=', $today))
+        )
+        ->when(
+          $memberStatus === 'inactive',
+          fn($q) =>
+          $q->whereDoesntHave('member.contracts', fn($c) => $c->where('end_date', '>=', $today))
+        );
+
+      // Base query untuk member, ter-filter status member
+      $memberQ = fn() => Member::query()
+        ->when(
+          $memberStatus === 'active',
+          fn($q) =>
+          $q->whereHas('contracts', fn($c) => $c->where('end_date', '>=', $today))
+        )
+        ->when(
+          $memberStatus === 'inactive',
+          fn($q) =>
+          $q->whereDoesntHave('contracts', fn($c) => $c->where('end_date', '>=', $today))
+        );
+
+      // === Tetap pakai logic-mu, tapi ganti TComplaint::... jadi $complaintQ()->... ===
+      $complaints = $complaintQ()->with('member')->latest()->take(10)->get();
+      $totalComplaintsThisMonth = $complaintQ()->whereMonth('created_at', $currentMonth)->count();
+      $complaintPending = $complaintQ()->where('status', 'pending')->count();
+      $complaintInProgress = $complaintQ()->where('status', 'in_progress')->count();
+      $complaintResolved = $complaintQ()->where('status', 'resolved')->count();
+
+      // Gender count ikut ter-filter status member
+      $maleCount = $memberQ()->where('gender', 'male')->count();
+      $femaleCount = $memberQ()->where('gender', 'female')->count();
 
       $keys = [];
       $categories = [];
@@ -58,10 +94,10 @@ class HomeController extends Controller
       if ($viewBy === 'month') {
         $period = CarbonPeriod::create($start->copy()->startOfMonth(), '1 month', $end->copy()->startOfMonth());
         foreach ($period as $dt) {
-          $keys[]   = $dt->format('Y-m');               // e.g. 2025-09
-          $categories[] = $dt->isoFormat('MMM YY');         // e.g. Sep 25
+          $keys[]       = $dt->format('Y-m');          // e.g. 2025-09
+          $categories[] = $dt->isoFormat('MMM YY');    // e.g. Sep 25
         }
-        $bucketSql    = "DATE_FORMAT(created_at, '%Y-%m')";
+        $bucketSql = "DATE_FORMAT(created_at, '%Y-%m')";
       } else { // week (ISO week)
         $period = CarbonPeriod::create(
           $start->copy()->startOfWeek(Carbon::MONDAY),
@@ -71,40 +107,44 @@ class HomeController extends Controller
         foreach ($period as $dt) {
           $isoYear = $dt->isoWeekYear;
           $isoWeek = $dt->isoWeek;
-          $keys[]   = sprintf('%d-%02d', $isoYear, $isoWeek); // e.g. 2025-37
+          $keys[]       = sprintf('%d-%02d', $isoYear, $isoWeek);         // e.g. 2025-37
           $categories[] = sprintf('W%02d %s', $isoWeek, substr((string)$isoYear, -2)); // e.g. W37 25
         }
         // %x = ISO week-year, %v = ISO week number (01..53)
-        $bucketSql    = "DATE_FORMAT(created_at, '%x-%v')";
+        $bucketSql = "DATE_FORMAT(created_at, '%x-%v')";
       }
 
-      // --- Ambil status yang ada di range (biar legend rapi & relevan) ---
-      $statuses = TComplaint::whereBetween('created_at', [$start, $end])
+      // Status yang ada di range (ikut filter member)
+      $statuses = $complaintQ()
+        ->whereBetween('created_at', [$start, $end])
         ->distinct()->pluck('status')->filter()->values()->all();
 
-      // --- Query agregasi: total per bucket & per status per bucket ---
-      $totals = TComplaint::selectRaw("$bucketSql as bucket, COUNT(*) as total")
+      // Agregasi total per bucket (ikut filter member)
+      $totals = $complaintQ()
+        ->selectRaw("$bucketSql as bucket, COUNT(*) as total")
         ->whereBetween('created_at', [$start, $end])
         ->groupBy('bucket')
         ->get()
         ->keyBy('bucket');
 
-      $rows = TComplaint::selectRaw("status, $bucketSql as bucket, COUNT(*) as total")
+      // Agregasi per status per bucket (ikut filter member)
+      $rowsAgg = $complaintQ()
+        ->selectRaw("status, $bucketSql as bucket, COUNT(*) as total")
         ->whereBetween('created_at', [$start, $end])
         ->groupBy('status', 'bucket')
         ->get();
 
-      // --- Susun series "Total" ---
+      // Susun series "Total"
       $totalData = [];
       foreach ($keys as $i => $k) {
         $totalData[$i] = isset($totals[$k]) ? (int)$totals[$k]->total : 0;
       }
       $series = [['name' => 'Total', 'data' => $totalData]];
 
-      // --- Susun series per status ---
+      // Susun series per status
       foreach ($statuses as $status) {
         $data = array_fill(0, count($keys), 0);
-        foreach ($rows as $r) {
+        foreach ($rowsAgg as $r) {
           if ($r->status === $status) {
             $idx = array_search($r->bucket, $keys, true);
             if ($idx !== false) $data[$idx] = (int)$r->total;
@@ -116,6 +156,7 @@ class HomeController extends Controller
         ];
       }
 
+      // Contoh chart lain yang tidak terkait member (biarkan seperti semula)
       $rows = Part::query()
         ->leftJoin('t_contract as c', 'c.m_part_id', '=', 'm_part.id')
         ->select('m_part.name', DB::raw('COUNT(c.id) as total'))
@@ -139,8 +180,8 @@ class HomeController extends Controller
     } else {
       $member = Member::with('contracts')->where('m_user_id', Auth::user()->id)->first();
 
-      if ($member->contracts->where('end_date', '>=', now()->format('Y-m-d'))->count() > 0) {
-        abort(403, 'Anda bukan anggota aktif. Silakan hubungi admin untuk memperbarui status keanggotaan Anda.');
+      if (!$member->contracts->where('end_date', '>=', now()->format('Y-m-d'))->count() > 0) {
+        abort(404, 'Anda bukan anggota aktif. Silakan hubungi admin untuk memperbarui status keanggotaan Anda.');
       }
 
       $contracts = TContract::query()
