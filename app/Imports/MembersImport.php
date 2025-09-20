@@ -34,8 +34,9 @@ class MembersImport implements ToCollection
       $users[] = [
         'id' => $userId,
         'name' => $row[0],
+        'reg_number' => $row[1],
         'email' => $row[15],
-        'password' => bcrypt($row[1]),
+        'password' => bcrypt($row[2]),
         'created_at' => now(),
         'updated_at' => now()
       ];
