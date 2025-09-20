@@ -50,6 +50,8 @@ class ProfileController extends Controller
       'is_married'         => ['nullable', 'boolean'],
       'hobbies'            => ['nullable', 'string', 'max:255'],
       'photo'              => ['nullable', 'image', 'max:2048'],
+      'password'           => ['nullable', 'string', 'min:8'],
+      'password_confirmation' => ['nullable', 'same:password'],
     ], [
       'user_id.required'   => 'User wajib diisi.',
       'user_id.exists'     => 'User tidak ditemukan.',
@@ -77,6 +79,13 @@ class ProfileController extends Controller
         $validated['pp_file'] = FileHelper::storeFile($request->file('photo'), '/member');
         $validated['pp_path'] = '/member';
       }
+
+      if (!empty($validated['password'])) {
+        $user->update([
+          'password' => bcrypt($validated['password']),
+        ]);
+      }
+      unset($validated['password'], $validated['password_confirmation']);
 
       $member->update($validated);
 

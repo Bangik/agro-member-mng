@@ -306,6 +306,51 @@
                                     @enderror
                                 </div>
                             </div>
+
+                            <div class="col-md-6">
+                                <div class="form-password-toggle">
+                                    <div class="input-group input-group-merge">
+                                        <div class="form-floating form-floating-outline">
+                                            <input class="form-control @error('password') is-invalid @enderror"
+                                                type="password" id="password" name="password" autofocus
+                                                placeholder="Password"
+                                                placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                                aria-describedby="password" />
+                                            <label for="password">Password</label>
+                                            @error('password')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                        <span class="input-group-text cursor-pointer"><i
+                                                class="ri-eye-off-line ri-20px"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-password-toggle">
+                                    <div class="input-group input-group-merge">
+                                        <div class="form-floating form-floating-outline">
+                                            <input
+                                                class="form-control @error('password_confirmation') is-invalid @enderror"
+                                                type="password" id="password_confirmation" name="password_confirmation"
+                                                autofocus placeholder="Konfirmasi Password"
+                                                placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                                aria-describedby="password_confirmation" />
+                                            <label for="password_confirmation">Konfirmasi Password</label>
+                                            @error('password_confirmation')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                        <span class="input-group-text cursor-pointer"><i
+                                                class="ri-eye-off-line ri-20px"></i></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-floating form-floating-outline mt-5">
