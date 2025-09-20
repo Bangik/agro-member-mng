@@ -51,6 +51,7 @@ class ComplaintController extends Controller
     $complaint->response = $request->response;
     $complaint->response_at = $request->response_at;
     $complaint->m_user_id = Auth::user()->id;
+    $complaint->status = 'in_progress';
     $complaint->save();
 
     dispatch(new ChangeStatusToSolvedJob($complaint))->delay(now()->addDays(7));

@@ -80,7 +80,7 @@
                                             class="dropdown-item">
                                             <i class="ri-eye-line me-1"></i>
                                             Detail</a>
-                                        @if ($complaint->status !== 'resolved')
+                                        @if ($complaint->status === 'pending')
                                             <button class="dropdown-item" data-bs-toggle="modal"
                                                 data-bs-target="#modalEdit{{ $complaint->id }}">
                                                 <i class="ri-pencil-line me-1"></i>

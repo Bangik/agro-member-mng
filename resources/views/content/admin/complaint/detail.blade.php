@@ -63,9 +63,15 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
+                                @php
+                                    $isDisabled = true;
+                                    if (Auth::user()->role === 'superadmin' || $complaint->status !== 'pending') {
+                                        $isDisabled = false;
+                                    }
+                                @endphp
                                 <div class="form-floating form-floating-outline">
                                     <textarea class="form-control h-px-100 @error('response') is-invalid @enderror" id="response" name="response" autofocus
-                                        placeholder="Response">{{ old('response', $complaint->response) }}</textarea>
+                                        placeholder="Response" {{ $isDisabled ? 'readonly' : '' }}>{{ old('response', $complaint->response) }}</textarea>
                                     <label for="response">Response</label>
                                     @error('response')
                                         <span class="invalid-feedback" role="alert">
