@@ -16,7 +16,13 @@ class ComplaintController extends Controller
     $search = $request->input('search');
     $status = $request->input('status');
     $onlyTrashed = $request->input('only_trashed', 'all');
+    $sort = $request->get('sort', 'code');
+    $dir  = strtolower($request->get('dir', 'asc')) === 'asc' ? 'asc' : 'desc';
 
+    $allowedSorts = ['code', 'created_at', 'status', 'response_at', 'resolved_at'];
+    if (!in_array($sort, $allowedSorts, true)) {
+      $sort = 'code';
+    }
 
     $complaints = TComplaint::query()
       ->when($onlyTrashed === 'yes', function ($query) {
@@ -42,7 +48,13 @@ class ComplaintController extends Controller
       ->when($status, function ($query, $status) {
         return $query->where('status', $status);
       })
-      ->orderBy('created_at', 'desc')
+      // ->orderBy($sort, $dir)
+      ->when($sort === 'code', function ($query) use ($dir) {
+        return $query
+          ->orderByRaw("CAST(SUBSTRING_INDEX(code, '/', -1) AS UNSIGNED) {$dir}") // YYYY
+          ->orderByRaw("CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(code, '/', -2), '/', 1) AS UNSIGNED) {$dir}") // MM
+          ->orderByRaw("CAST(SUBSTRING_INDEX(code, '/', 1) AS UNSIGNED) {$dir}"); // NNN
+      })
       ->paginate(10);
 
     return view('content.admin.complaint.index', compact('complaints', 'search', 'status'));

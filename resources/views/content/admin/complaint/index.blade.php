@@ -52,9 +52,26 @@
         </div>
         <div class="table-responsive text-nowrap">
             <table class="table table-hover">
+                @php
+                    $currentSort = request('sort', 'code');
+                    $currentDir = strtolower(request('dir', 'asc'));
+                    $isCodeSort = $currentSort === 'code';
+                    $nextDir = $isCodeSort && $currentDir === 'asc' ? 'desc' : 'asc';
+
+                    $codeSortUrl = request()->fullUrlWithQuery(
+                        array_merge(request()->except('page'), ['sort' => 'code', 'dir' => $nextDir, 'page' => 1]),
+                    );
+                @endphp
                 <thead>
                     <tr>
-                        <th>Kode Aspirasi / Aduan</th>
+                        <th>
+                            <a href="{{ $codeSortUrl }}" class="text-decoration-none">
+                                Kode Aspirasi / Aduan
+                                @if ($isCodeSort)
+                                    {!! $currentDir === 'asc' ? '&#9650;' : '&#9660;' !!} {{-- ▲ / ▼ --}}
+                                @endif
+                            </a>
+                        </th>
                         <th>Nama Pengadu</th>
                         <th>Judul Aspirasi / Aduan</th>
                         <th>Status</th>
