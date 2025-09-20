@@ -13,7 +13,18 @@ class AdminController extends Controller
   public function index(Request $request)
   {
     $search = $request->input('search');
-    $admins = User::whereNot('role', 'member')
+    $onlyTrashed = $request->input('only_trashed', 'all');
+    $admins = User::query()
+      ->when($onlyTrashed === 'yes', function ($query) {
+        $query->onlyTrashed();
+      })
+      ->when($onlyTrashed === 'no', function ($query) {
+        $query->whereNull('deleted_at');
+      })
+      ->when($onlyTrashed === 'all', function ($query) {
+        $query->withTrashed();
+      })
+      ->whereNot('role', 'member')
       ->when($search, function ($query) use ($search) {
         $query->where('name', 'like', "%{$search}%");
       })
@@ -39,6 +50,7 @@ class AdminController extends Controller
 
     User::create([
       'name' => $request->name,
+      'reg_number' => $request->email,
       'email' => $request->email,
       'password' => bcrypt($request->email),
       'role' => $request->role,
@@ -49,7 +61,7 @@ class AdminController extends Controller
 
   public function update(Request $request, $id)
   {
-    $admin = User::findOrFail($id);
+    $admin = User::withTrashed()->findOrFail($id);
 
     $validator = Validator::make($request->all(), [
       'name' => 'required|string|max:255',
@@ -80,5 +92,12 @@ class AdminController extends Controller
       'status' => 'success',
       'message' => 'Admin deleted successfully'
     ]);
+  }
+
+  public function restore($id)
+  {
+    $admin = User::onlyTrashed()->findOrFail($id);
+    $admin->restore();
+    return redirect()->route('admin.admin.index')->with('success', 'Admin restored successfully');
   }
 }

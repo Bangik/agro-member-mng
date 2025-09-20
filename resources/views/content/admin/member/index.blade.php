@@ -31,6 +31,20 @@
                                         Aktif</option>
                                 </select>
                             </label>
+                            {{-- filter by trashed --}}
+                            <label>
+                                <select name="only_trashed" id="only_trashed" class="form-select form-select-sm"
+                                    onchange="this.form.submit()">
+                                    <option value="all" {{ request('only_trashed') == 'all' ? 'selected' : '' }}>Semua
+                                    </option>
+                                    <option value="yes" {{ request('only_trashed') == 'yes' ? 'selected' : '' }}>Hanya
+                                        Terhapus
+                                    </option>
+                                    <option value="no" {{ request('only_trashed') == 'no' ? 'selected' : '' }}>Hanya
+                                        Aktif
+                                    </option>
+                                </select>
+                            </label>
                         </form>
                     </div>
                     <div class="add-new">
@@ -78,7 +92,10 @@
                                         </div>
                                     </div>
                                     <div class="d-flex flex-column">
-                                        <span class="emp_name text-truncate h6 mb-0">{{ $member->name }}</span>
+                                        <span class="emp_name text-truncate h6 mb-0">{{ $member->name }} @if ($member->trashed())
+                                                <span class="badge bg-label-danger">Terhapus</span>
+                                            @endif
+                                        </span>
                                         <small class="emp_post text-truncate">
                                             {{ $member->reg_number }}
                                         </small>
@@ -113,9 +130,22 @@
                                             href="{{ route('admin.members.edit', ['id' => $member->id]) }}"><i
                                                 class="ri-pencil-line me-1"></i>
                                             Edit</a>
-                                        <button class="dropdown-item button-swal" data-id="{{ $member->id }}"
-                                            data-name="{{ $member->name }}"><i class="ri-delete-bin-6-line me-1"></i>
-                                            Delete</button>
+                                        @if ($member->trashed())
+                                            <form action="{{ route('admin.members.restore', ['id' => $member->id]) }}"
+                                                method="POST">
+                                                @csrf
+                                                <button type="submit" class="dropdown-item"><i
+                                                        class="ri-restart-line me-1"></i>
+                                                    Restore</button>
+                                            </form>
+                                        @else
+                                            @if (auth()->user()->role === 'superadmin')
+                                                <button class="dropdown-item button-swal" data-id="{{ $member->id }}"
+                                                    data-name="{{ $member->name }}"><i
+                                                        class="ri-delete-bin-6-line me-1"></i>
+                                                    Delete</button>
+                                            @endif
+                                        @endif
                                     </div>
                                 </div>
                             </td>

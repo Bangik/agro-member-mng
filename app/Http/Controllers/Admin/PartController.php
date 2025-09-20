@@ -10,7 +10,18 @@ class PartController extends Controller
 {
   public function index(Request $request)
   {
+    $onlyTrashed = $request->input('only_trashed', 'all');
+
     $parts = Part::query()
+      ->when($onlyTrashed === 'yes', function ($query) {
+        $query->onlyTrashed();
+      })
+      ->when($onlyTrashed === 'no', function ($query) {
+        $query->whereNull('deleted_at');
+      })
+      ->when($onlyTrashed === 'all', function ($query) {
+        $query->withTrashed();
+      })
       ->when($request->search, function ($query, $search) {
         $query->where('name', 'like', "%{$search}%");
       })
@@ -39,7 +50,7 @@ class PartController extends Controller
       'name' => 'required|string|max:255',
     ]);
 
-    $part = Part::findOrFail($id);
+    $part = Part::withTrashed()->findOrFail($id);
     $part->update([
       'name' => $request->name,
     ]);
@@ -53,5 +64,15 @@ class PartController extends Controller
     $part->delete();
 
     return response()->json(['success' => true, 'message' => 'Bagian berhasil dihapus.']);
+  }
+
+  public function restore($id)
+  {
+    $part = Part::withTrashed()->findOrFail($id);
+    if ($part->trashed()) {
+      $part->restore();
+      return redirect()->route('admin.parts.index')->with('success', 'Bagian berhasil dipulihkan.');
+    }
+    return redirect()->route('admin.parts.index')->with('info', 'Bagian tidak dalam keadaan terhapus.');
   }
 }

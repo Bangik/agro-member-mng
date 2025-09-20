@@ -17,6 +17,19 @@
                                 <input type="search" class="form-control form-control-sm" placeholder="Cari Berdasarkan Nama"
                                     id="search" name="search" value="{{ request('search') }}" />
                             </label>
+                            <label>
+                                <select id="only_trashed" name="only_trashed" class="form-select form-select-sm"
+                                    onchange="document.getElementById('form-filter').submit()">
+                                    <option value="all" {{ request('only_trashed') == 'all' ? 'selected' : '' }}>Semua
+                                    </option>
+                                    <option value="yes" {{ request('only_trashed') == 'yes' ? 'selected' : '' }}>Hanya
+                                        Terhapus
+                                    </option>
+                                    <option value="no" {{ request('only_trashed') == 'no' ? 'selected' : '' }}>Hanya
+                                        Aktif
+                                    </option>
+                                </select>
+                            </label>
                         </form>
                     </div>
                     <div class="add-new">
@@ -46,7 +59,11 @@
                                 {{ $loop->iteration }}
                             </td>
                             <td>
-                                <span class="emp_name text-truncate h6 mb-0">{{ $admin->name }}</span>
+                                <span class="emp_name text-truncate h6 mb-0">
+                                    {{ $admin->name }} @if ($admin->trashed())
+                                        <span class="badge bg-label-danger">Terhapus</span>
+                                    @endif
+                                </span>
                             </td>
                             <td>
                                 {{ $admin->email }}
@@ -60,9 +77,22 @@
                                             data-bs-target="#modalEdit{{ $admin->id }}">
                                             <i class="ri-pencil-line me-1"></i>
                                             Edit</button>
-                                        <button class="dropdown-item button-swal" data-id="{{ $admin->id }}"
-                                            data-name="{{ $admin->name }}"><i class="ri-delete-bin-6-line me-1"></i>
-                                            Delete</button>
+                                        @if ($admin->trashed())
+                                            <form action="{{ route('admin.admin.restore', ['id' => $admin->id]) }}"
+                                                method="POST">
+                                                @csrf
+                                                <button type="submit" class="dropdown-item"><i
+                                                        class="ri-restart-line me-1"></i>
+                                                    Restore</button>
+                                            </form>
+                                        @else
+                                            @if (auth()->user()->id !== $admin->id && auth()->user()->role === 'superadmin')
+                                                <button class="dropdown-item button-swal" data-id="{{ $admin->id }}"
+                                                    data-name="{{ $admin->name }}"><i
+                                                        class="ri-delete-bin-6-line me-1"></i>
+                                                    Delete</button>
+                                            @endif
+                                        @endif
                                     </div>
                                 </div>
                             </td>

@@ -17,6 +17,19 @@
                                 <input type="search" class="form-control form-control-sm" placeholder="Cari Berdasarkan Nama"
                                     id="search" name="search" value="{{ request('search') }}" />
                             </label>
+                            <label>
+                                <select id="only_trashed" name="only_trashed" class="form-select form-select-sm"
+                                    onchange="document.getElementById('form-filter').submit()">
+                                    <option value="all" {{ request('only_trashed') == 'all' ? 'selected' : '' }}>Semua
+                                    </option>
+                                    <option value="yes" {{ request('only_trashed') == 'yes' ? 'selected' : '' }}>Hanya
+                                        Terhapus
+                                    </option>
+                                    <option value="no" {{ request('only_trashed') == 'no' ? 'selected' : '' }}>Hanya
+                                        Aktif
+                                    </option>
+                                </select>
+                            </label>
                         </form>
                     </div>
                     <div class="add-new">
@@ -45,7 +58,9 @@
                                 {{ $loop->iteration }}
                             </td>
                             <td>
-                                {{ $part->name }}
+                                {{ $part->name }} @if ($part->trashed())
+                                    <span class="badge bg-label-danger">Terhapus</span>
+                                @endif
                             </td>
                             <td>
                                 <div class="dropdown">
@@ -56,9 +71,22 @@
                                             data-bs-target="#modalEdit{{ $part->id }}">
                                             <i class="ri-pencil-line me-1"></i>
                                             Edit</button>
-                                        <button class="dropdown-item button-swal" data-id="{{ $part->id }}"
-                                            data-name="{{ $part->name }}"><i class="ri-delete-bin-6-line me-1"></i>
-                                            Delete</button>
+                                        @if ($part->trashed())
+                                            <form action="{{ route('admin.parts.restore', ['id' => $part->id]) }}"
+                                                method="POST">
+                                                @csrf
+                                                <button type="submit" class="dropdown-item"><i
+                                                        class="ri-restart-line me-1"></i>
+                                                    Restore</button>
+                                            </form>
+                                        @else
+                                            @if (auth()->user()->role === 'superadmin')
+                                                <button class="dropdown-item button-swal" data-id="{{ $part->id }}"
+                                                    data-name="{{ $part->name }}"><i
+                                                        class="ri-delete-bin-6-line me-1"></i>
+                                                    Delete</button>
+                                            @endif
+                                        @endif
                                     </div>
                                 </div>
                             </td>

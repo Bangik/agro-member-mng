@@ -172,7 +172,9 @@
                                             {{ $loop->iteration }}
                                         </td>
                                         <td>
-                                            {{ $contract->contract_number }}
+                                            {{ $contract->contract_number }} @if ($contract->deleted_at)
+                                                <span class="badge bg-label-danger">Terhapus</span>
+                                            @endif
                                         </td>
                                         <td>
                                             {{ \Carbon\Carbon::parse($contract->start_date)->format('d M Y') }}

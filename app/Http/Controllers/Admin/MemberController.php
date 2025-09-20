@@ -22,8 +22,18 @@ class MemberController extends Controller
   {
     $search = $request->input('search');
     $status = $request->input('status');
+    $onlyTrashed = $request->input('only_trashed', 'all');
 
     $members = Member::query()
+      ->when($onlyTrashed === 'yes', function ($query) {
+        $query->onlyTrashed();
+      })
+      ->when($onlyTrashed === 'no', function ($query) {
+        $query->whereNull('deleted_at');
+      })
+      ->when($onlyTrashed === 'all', function ($query) {
+        $query->withTrashed();
+      })
       ->with('contracts')
       ->when($search, function ($query) use ($search) {
         return $query->where(function ($q) use ($search) {
@@ -133,13 +143,13 @@ class MemberController extends Controller
 
   public function edit($id)
   {
-    $member = Member::findOrFail($id);
+    $member = Member::withTrashed()->findOrFail($id);
     return view('content.admin.member.edit', compact('member'));
   }
 
   public function update(Request $request, $id)
   {
-    $member = Member::findOrFail($id);
+    $member = Member::withTrashed()->findOrFail($id);
 
     $validated = $request->validate([
       'reg_number'         => ['required', 'string', 'max:255'],
@@ -180,7 +190,7 @@ class MemberController extends Controller
 
     DB::beginTransaction();
     try {
-      $user = User::findOrFail($member->m_user_id);
+      $user = User::withTrashed()->findOrFail($member->m_user_id);
       $user->update([
         'name' => $validated['name'],
         'email' => $validated['email'],
@@ -216,8 +226,9 @@ class MemberController extends Controller
 
   public function detail($id)
   {
-    $member = Member::findOrFail($id);
+    $member = Member::withTrashed()->findOrFail($id);
     $contracts = TContract::query()
+      ->withTrashed()
       ->with('part')
       ->where('m_member_id', $id)
       ->latest()
@@ -229,11 +240,18 @@ class MemberController extends Controller
 
   public function generatePdf($id)
   {
-    $member = Member::with([
-      'contracts' => function ($query) {
-        $query->with('part')->orderBy('created_at', 'desc');
-      }
-    ])->where('id', $id)->firstOrFail();
+    $member = Member::query()
+      ->withTrashed()
+      ->with([
+        'contracts' => function ($query) {
+          $query
+            ->withTrashed()
+            ->with('part')
+            ->orderBy('created_at', 'desc');
+        }
+      ])
+      ->where('id', $id)
+      ->firstOrFail();
     $setting = Setting::first();
 
 
@@ -261,32 +279,16 @@ class MemberController extends Controller
   public function destroy($id)
   {
     $member = Member::findOrFail($id);
+    User::where('id', $member->m_user_id)->delete();
     $member->delete();
     return response()->json(['message' => 'Member deleted successfully.']);
-  }
-
-  public function getDeletedMembers(Request $request)
-  {
-    $deletedMembers = Member::onlyTrashed()->paginate(10);
-    return view('content.admin.member.deleted', compact('deletedMembers'));
   }
 
   public function restore($id)
   {
     $member = Member::onlyTrashed()->findOrFail($id);
+    User::where('id', $member->m_user_id)->restore();
     $member->restore();
-    return redirect()->route('admin.members.deleted')->with('success', 'Member restored successfully.');
-  }
-
-  public function forceDelete($id)
-  {
-    $member = Member::onlyTrashed()->findOrFail($id);
-
-    if ($member->pp_file) {
-      FileHelper::deleteFile('/member', $member->pp_file);
-    }
-
-    $member->forceDelete();
-    return redirect()->route('admin.members.deleted')->with('success', 'Member permanently deleted.');
+    return redirect()->route('admin.members.index')->with('success', 'Member restored successfully.');
   }
 }

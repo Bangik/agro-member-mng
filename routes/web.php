@@ -32,6 +32,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/create', [MemberController::class, 'create'])->name('admin.members.create');
     Route::post('/import', [MemberController::class, 'import'])->name('admin.members.import');
     Route::post('/', [MemberController::class, 'store'])->name('admin.members.store');
+    Route::post('/{id}/restore', [MemberController::class, 'restore'])->name('admin.members.restore');
     Route::get('/{id}/detail/pdf', [MemberController::class, 'generatePdf'])->name('admin.members.detail.pdf');
     Route::get('/{id}/detail', [MemberController::class, 'detail'])->name('admin.members.detail');
     Route::get('/{id}/edit', [MemberController::class, 'edit'])->name('admin.members.edit');
@@ -42,12 +43,14 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
   Route::prefix('parts')->group(function () {
     Route::get('/', [PartController::class, 'index'])->name('admin.parts.index');
     Route::post('/', [PartController::class, 'store'])->name('admin.parts.store');
+    Route::post('/{id}/restore', [PartController::class, 'restore'])->name('admin.parts.restore');
     Route::put('/{id}', [PartController::class, 'update'])->name('admin.parts.update');
     Route::delete('/{id}', [PartController::class, 'destroy'])->name('admin.parts.destroy');
   });
 
   Route::prefix('complaints')->group(function () {
     Route::get('/', [ComplaintController::class, 'index'])->name('admin.complaints.index');
+    Route::post('/{id}/restore', [ComplaintController::class, 'restore'])->name('admin.complaints.restore');
     Route::get('/{id}/detail', [ComplaintController::class, 'detail'])->name('admin.complaints.detail');
     Route::get('/{id}/view', [ComplaintController::class, 'view'])->name('admin.complaints.view');
     Route::get('/{id}/detail/pdf', [ComplaintController::class, 'generatePdf'])->name('admin.complaints.detail.pdf');
@@ -59,14 +62,15 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::post('/', [ContractController::class, 'store'])->name('admin.contracts.store');
   });
 
-  Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
-  Route::get('/users/{id}/detail', [UserController::class, 'detail'])->name('admin.users.detail');
-  Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
-  Route::delete('/users/{id}', [UserController::class, 'delete'])->name('admin.users.delete');
+  // Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
+  // Route::get('/users/{id}/detail', [UserController::class, 'detail'])->name('admin.users.detail');
+  // Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
+  // Route::delete('/users/{id}', [UserController::class, 'delete'])->name('admin.users.delete');
 
   Route::prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin.admin.index');
     Route::post('/store', [AdminController::class, 'store'])->name('admin.admin.store');
+    Route::post('/{id}/restore', [AdminController::class, 'restore'])->name('admin.admin.restore');
     Route::put('/{id}', [AdminController::class, 'update'])->name('admin.admin.update');
     Route::delete('/{id}', [AdminController::class, 'delete'])->name('admin.admin.delete');
   });

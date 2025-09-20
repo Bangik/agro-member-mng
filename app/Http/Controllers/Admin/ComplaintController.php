@@ -15,9 +15,23 @@ class ComplaintController extends Controller
   {
     $search = $request->input('search');
     $status = $request->input('status');
+    $onlyTrashed = $request->input('only_trashed', 'all');
+
 
     $complaints = TComplaint::query()
-      ->with('member', 'user')
+      ->when($onlyTrashed === 'yes', function ($query) {
+        $query->onlyTrashed();
+      })
+      ->when($onlyTrashed === 'no', function ($query) {
+        $query->whereNull('deleted_at');
+      })
+      ->when($onlyTrashed === 'all', function ($query) {
+        $query->withTrashed();
+      })
+      ->with([
+        'member' => fn($query) => $query->withTrashed(),
+        'user' => fn($query) => $query->withTrashed(),
+      ])
       ->when($search, function ($query, $search) {
         return $query->where(function ($q) use ($search) {
           $q->where('title', 'like', "%{$search}%")
@@ -36,13 +50,23 @@ class ComplaintController extends Controller
 
   public function detail($id)
   {
-    $complaint = TComplaint::with('member', 'user')->findOrFail($id);
+    $complaint = TComplaint::withTrashed()
+      ->with([
+        'member' => fn($query) => $query->withTrashed(),
+        'user' => fn($query) => $query->withTrashed(),
+      ])
+      ->findOrFail($id);
     return view('content.admin.complaint.detail', compact('complaint'));
   }
 
   public function view($id)
   {
-    $complaint = TComplaint::with('member', 'user')->findOrFail($id);
+    $complaint = TComplaint::withTrashed()
+      ->with([
+        'member' => fn($query) => $query->withTrashed(),
+        'user' => fn($query) => $query->withTrashed(),
+      ])
+      ->findOrFail($id);
     return view('content.admin.complaint.view', compact('complaint'));
   }
 
@@ -53,7 +77,7 @@ class ComplaintController extends Controller
       'response_at' => 'required|date',
     ]);
 
-    $complaint = TComplaint::findOrFail($id);
+    $complaint = TComplaint::withTrashed()->findOrFail($id);
     $complaint->response = $request->response;
     $complaint->response_at = $request->response_at;
     $complaint->m_user_id = Auth::user()->id;
@@ -80,5 +104,12 @@ class ComplaintController extends Controller
     $complaint->delete();
 
     return response()->json(['success' => true, 'message' => 'Bagian berhasil dihapus.']);
+  }
+
+  public function restore($id)
+  {
+    $complaint = TComplaint::onlyTrashed()->findOrFail($id);
+    $complaint->restore();
+    return redirect()->route('admin.complaints.index')->with('success', 'Aspirasi / Aduan berhasil dikembalikan.');
   }
 }

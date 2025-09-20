@@ -32,6 +32,19 @@
                                         Resolved</option>
                                 </select>
                             </label>
+                            <label>
+                                <select id="only_trashed" name="only_trashed" class="form-select form-select-sm"
+                                    onchange="document.getElementById('form-filter').submit()">
+                                    <option value="all" {{ request('only_trashed') == 'all' ? 'selected' : '' }}>Semua
+                                    </option>
+                                    <option value="yes" {{ request('only_trashed') == 'yes' ? 'selected' : '' }}>Hanya
+                                        Terhapus
+                                    </option>
+                                    <option value="no" {{ request('only_trashed') == 'no' ? 'selected' : '' }}>Hanya
+                                        Aktif
+                                    </option>
+                                </select>
+                            </label>
                         </form>
                     </div>
                 </div>
@@ -62,6 +75,10 @@
                                     $year = isset($parts[3]) ? substr($parts[3], -2) : '';
                                 @endphp
                                 {{ $seq }}.{{ $month }}.{{ $year }}
+
+                                @if ($complaint->trashed())
+                                    <span class="badge bg-label-danger">Terhapus</span>
+                                @endif
                             </td>
                             <td>
                                 <div class="d-flex justify-content-start align-items-center user-name">
@@ -79,7 +96,11 @@
                                         </div>
                                     </div>
                                     <div class="d-flex flex-column">
-                                        <span class="emp_name text-truncate h6 mb-0">{{ $complaint->member->name }}</span>
+                                        <span class="emp_name text-truncate h6 mb-0">{{ $complaint->member->name }}
+                                            @if ($complaint->member->trashed())
+                                                <span class="badge bg-label-danger">Member Terhapus</span>
+                                            @endif
+                                        </span>
                                         <small class="emp_post text-truncate">
                                             {{ $complaint->member->reg_number }}
                                         </small>
@@ -120,11 +141,22 @@
                                             class="dropdown-item">
                                             <i class="ri-eye-line me-1"></i>
                                             Detail Aspirasi / Aduan</a>
-                                        @if ($complaint->status !== 'resolved')
-                                            <button class="dropdown-item button-swal" data-id="{{ $complaint->id }}"
-                                                data-name="{{ $complaint->title }}"><i
-                                                    class="ri-delete-bin-6-line me-1"></i>
-                                                Delete</button>
+                                        @if ($complaint->trashed())
+                                            <form
+                                                action="{{ route('admin.complaints.restore', ['id' => $complaint->id]) }}"
+                                                method="POST">
+                                                @csrf
+                                                <button type="submit" class="dropdown-item"><i
+                                                        class="ri-restart-line me-1"></i>
+                                                    Restore</button>
+                                            </form>
+                                        @else
+                                            @if ($complaint->status !== 'resolved' && auth()->user()->role === 'superadmin')
+                                                <button class="dropdown-item button-swal" data-id="{{ $complaint->id }}"
+                                                    data-name="{{ $complaint->title }}"><i
+                                                        class="ri-delete-bin-6-line me-1"></i>
+                                                    Delete</button>
+                                            @endif
                                         @endif
                                     </div>
                                 </div>
