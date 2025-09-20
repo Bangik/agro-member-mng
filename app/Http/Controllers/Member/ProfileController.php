@@ -49,7 +49,7 @@ class ProfileController extends Controller
       'blood_type'         => ['nullable', 'in:A,B,AB,O'],
       'is_married'         => ['nullable', 'boolean'],
       'hobbies'            => ['nullable', 'string', 'max:255'],
-      'photo'              => ['nullable', 'image', 'max:2048'],
+      'photo'              => ['nullable', 'image', 'max:512'], // max 500KB (512KB)
       'password'           => ['nullable', 'string', 'min:8'],
       'password_confirmation' => ['nullable', 'same:password'],
     ], [
