@@ -116,6 +116,10 @@
                                             class="dropdown-item">
                                             <i class="ri-pencil-line me-1"></i>
                                             Response Aspirasi / Aduan</a>
+                                        <a href="{{ route('admin.complaints.view', $complaint->id) }}"
+                                            class="dropdown-item">
+                                            <i class="ri-eye-line me-1"></i>
+                                            Detail Aspirasi / Aduan</a>
                                         @if ($complaint->status !== 'resolved')
                                             <button class="dropdown-item button-swal" data-id="{{ $complaint->id }}"
                                                 data-name="{{ $complaint->title }}"><i

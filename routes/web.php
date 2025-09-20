@@ -49,6 +49,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
   Route::prefix('complaints')->group(function () {
     Route::get('/', [ComplaintController::class, 'index'])->name('admin.complaints.index');
     Route::get('/{id}/detail', [ComplaintController::class, 'detail'])->name('admin.complaints.detail');
+    Route::get('/{id}/view', [ComplaintController::class, 'view'])->name('admin.complaints.view');
     Route::get('/{id}/detail/pdf', [ComplaintController::class, 'generatePdf'])->name('admin.complaints.detail.pdf');
     Route::put('/{id}', [ComplaintController::class, 'update'])->name('admin.complaints.update');
     Route::delete('/{id}', [ComplaintController::class, 'delete'])->name('admin.complaints.delete');

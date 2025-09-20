@@ -40,6 +40,12 @@ class ComplaintController extends Controller
     return view('content.admin.complaint.detail', compact('complaint'));
   }
 
+  public function view($id)
+  {
+    $complaint = TComplaint::with('member', 'user')->findOrFail($id);
+    return view('content.admin.complaint.view', compact('complaint'));
+  }
+
   public function update(Request $request, $id)
   {
     $request->validate([
