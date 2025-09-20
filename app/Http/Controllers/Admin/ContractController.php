@@ -2,12 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\ContractExport;
 use App\Http\Controllers\Controller;
 use App\Models\TContract;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ContractController extends Controller
 {
+  public function export()
+  {
+    $fileName = 'contracts_' . date('Ymd_His') . '.xlsx';
+    return Excel::download(new ContractExport, $fileName);
+  }
+
   public function store(Request $request)
   {
     $validated = $request->validate([

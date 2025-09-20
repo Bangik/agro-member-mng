@@ -58,4 +58,9 @@ class Member extends Model
   {
     return $this->hasMany(TComplaint::class, 'm_member_id', 'id');
   }
+
+  public function getPhotoUrlAttribute()
+  {
+    return $this->photoUrl();
+  }
 }

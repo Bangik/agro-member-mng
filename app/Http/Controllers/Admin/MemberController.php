@@ -289,4 +289,51 @@ class MemberController extends Controller
     $member->restore();
     return redirect()->route('admin.members.index')->with('success', 'Member restored successfully.');
   }
+
+  public function exportKtaPdfSelected(Request $request)
+  {
+    $ids = collect(json_decode($request->input('member_ids_json', '[]'), true))
+      ->filter(fn($v) => is_string($v) && strlen($v) > 0)
+      ->unique()->values()->all();
+
+    if (empty($ids)) {
+      return back()->with('error', 'Pilih minimal satu anggota.');
+    }
+
+    // Ambil member + kontraknya (urutkan biar rapi)
+    $members = Member::with(['contracts' => function ($q) {
+      $q->withTrashed()->orderByDesc('created_at');
+    }])
+      ->whereIn('id', $ids)
+      ->orderBy('name')
+      ->get();
+
+    $setting = Setting::first();
+
+    // Remote images ON agar photoUrl() (HTTP) bisa dimuat di PDF
+    $pdf = Pdf::setOptions([
+      'isRemoteEnabled' => true,
+      'dpi' => 150,
+      'defaultFont' => 'sans-serif',
+    ])
+      ->loadView('content.global.kta-multi-pdf', compact('members', 'setting'))
+      ->setPaper('a4', 'portrait');
+
+    $filename = 'kta_selected_' . now()->format('Ymd_His') . '.pdf';
+    // return $pdf->download($filename);
+    return $pdf->stream($filename);
+  }
+
+  public function printKTA($id)
+  {
+    $member = Member::query()
+      ->withTrashed()
+      ->with([
+        'contracts' => function ($q) {
+          $q->withTrashed();
+        }
+      ])->firstOrFail();
+    $setting = Setting::first();
+    return view('content.admin.settings.kta', compact('member', 'setting'));
+  }
 }

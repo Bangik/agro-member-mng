@@ -31,9 +31,12 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/', [MemberController::class, 'index'])->name('admin.members.index');
     Route::get('/create', [MemberController::class, 'create'])->name('admin.members.create');
     Route::post('/import', [MemberController::class, 'import'])->name('admin.members.import');
+    Route::post('/admin/members/export-kta-pdf', [MemberController::class, 'exportKtaPdfSelected'])
+      ->name('admin.members.export.kta.pdf');
     Route::post('/', [MemberController::class, 'store'])->name('admin.members.store');
     Route::post('/{id}/restore', [MemberController::class, 'restore'])->name('admin.members.restore');
     Route::get('/{id}/detail/pdf', [MemberController::class, 'generatePdf'])->name('admin.members.detail.pdf');
+    Route::get('/{id}/detail/kta/print', [MemberController::class, 'printKTA'])->name('admin.members.detail.kta');
     Route::get('/{id}/detail', [MemberController::class, 'detail'])->name('admin.members.detail');
     Route::get('/{id}/edit', [MemberController::class, 'edit'])->name('admin.members.edit');
     Route::put('/{id}', [MemberController::class, 'update'])->name('admin.members.update');
@@ -59,6 +62,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
   });
 
   Route::prefix('contracts')->group(function () {
+    Route::get('/export', [ContractController::class, 'export'])->name('admin.contracts.export');
     Route::post('/', [ContractController::class, 'store'])->name('admin.contracts.store');
     Route::put('/{id}', [ContractController::class, 'update'])->name('admin.contracts.update');
   });

@@ -38,9 +38,9 @@
     .kta__photo {
         position: absolute;
         top: 4mm;
-        left: 43mm;
-        width: 11mm;
-        height: 13mm;
+        left: 38mm;
+        width: 13.5mm;
+        height: 15mm;
         /* object-fit: cover; */
         border-radius: 1mm;
     }
@@ -54,29 +54,29 @@
 
     /* Contoh koordinat—SILAKAN SESUAIKAN dengan template Anda */
     .kta__name {
-        top: 15mm;
-        left: 55mm;
-        font-size: 2mm;
+        top: 11mm;
+        left: 52mm;
+        font-size: 3mm;
         font-weight: 700;
         max-width: 55mm;
     }
 
     .kta__part {
-        top: 17mm;
-        left: 55mm;
+        top: 14mm;
+        left: 52mm;
         font-size: 2mm;
         letter-spacing: .2mm;
     }
 
     .kta__number {
-        top: 22mm;
+        top: 21.5mm;
         left: 55mm;
         font-size: 2mm;
         letter-spacing: .2mm;
     }
 
     .kta__phone_number {
-        top: 30mm;
+        top: 29mm;
         left: 55mm;
         font-size: 2mm;
         font-weight: 500;
@@ -88,17 +88,19 @@
         left: 55mm;
         font-weight: 500;
         font-size: 2mm;
+        word-break: break-word;
+
     }
 
     .kta__start_date {
-        top: 36mm;
+        top: 33mm;
         left: 55mm;
         font-weight: 500;
         font-size: 2mm;
     }
 
     .kta__end_date {
-        top: 41mm;
+        top: 36.4mm;
         left: 55mm;
         font-weight: 500;
         font-size: 2mm;
@@ -148,13 +150,13 @@
             class="kta__photo_img">
     </div>
     <div class="kta__field kta__name">{{ $member ? $member->name : 'Nama' }}</div>
-    <div class="kta__field kta__part">{{ $member ? $member->contracts->first()->part : 'Bagian/Divisi' }}</div>
+    <div class="kta__field kta__part">{{ $member ? $member->contracts?->first()?->part : 'Bagian/Divisi' }}</div>
     <div class="kta__field kta__number">{{ $member ? $member->reg_number : 'Nomor Anggota' }}</div>
     <div class="kta__field kta__address">{{ $member ? $member->address : 'Alamat' }}</div>
     <div class="kta__field kta__phone_number">{{ $member ? $member->phone : 'Nomor HP' }}</div>
-    <div class="kta__field kta__start_date">{{ $member ? $member->contracts->first()->start_date : 'Tanggal Mulai' }}
+    <div class="kta__field kta__start_date">{{ $member ? $member->contracts?->first()?->start_date : 'Tanggal Mulai' }}
     </div>
-    <div class="kta__field kta__end_date">{{ $member ? $member->contracts->first()->end_date : 'Tanggal Berakhir' }}
+    <div class="kta__field kta__end_date">{{ $member ? $member->contracts?->first()?->end_date : 'Tanggal Berakhir' }}
     </div>
 </div>
 <br>
