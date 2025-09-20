@@ -154,7 +154,7 @@
 
     <div class="title">FORM ADUAN ANGGOTA<br />Serikat Pekerja Agroindustri PT Mitratani Dua Tujuh</div>
     <hr>
-    <div style="text-align: center;">Nomor : 001/AD-SPA/08/2025</div>
+    <div style="text-align: center;">Nomor : {{ $complaint->code }}</div>
 
     <div>
         <p>

@@ -8,6 +8,7 @@ use App\Models\TComplaint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
 
 class ComplaintController extends Controller
 {
@@ -32,9 +33,32 @@ class ComplaintController extends Controller
     ]);
 
     $member = Member::where('m_user_id', Auth::id())->firstOrFail();
+
+    $year  = (int) now()->format('Y');   // reset per tahun
+    $month = now()->format('m');
+
+    // Ambil nomor urut secara ATOMIK & aman dari race condition
+    // Pola: INSERT ... ON DUPLICATE KEY UPDATE last_number = LAST_INSERT_ID(last_number + 1)
+    // lalu ambil DB::getPdo()->lastInsertId()
+    $nextNumber = DB::transaction(function () use ($year) {
+      DB::statement("
+        INSERT INTO complaint_counter (`year`, `last_number`, `created_at`, `updated_at`)
+        VALUES (?, LAST_INSERT_ID(1), NOW(), NOW())
+        ON DUPLICATE KEY UPDATE
+            `last_number` = LAST_INSERT_ID(`last_number` + 1),
+            `updated_at` = NOW()
+    ", [$year]);
+
+      return (int) DB::getPdo()->lastInsertId(); // 1 saat baris tahun baru diinsert, atau n+1 saat update
+    });
+
+
+    $seq  = str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+    $code = "{$seq}/AD-SPA/{$month}/{$year}";
+
     TComplaint::create([
       'm_member_id' => $member->id,
-      'code' => 'CMP-' . strtoupper(uniqid()),
+      'code' => $code,
       'title' => $validated['title'],
       'complaint' => $validated['complaint'],
     ]);

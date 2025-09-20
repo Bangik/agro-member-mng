@@ -54,7 +54,15 @@
                 <tbody class="table-border-bottom-0">
                     @foreach ($complaints as $complaint)
                         <tr>
-                            <td>{{ $complaint->code }}</td>
+                            <td>
+                                @php
+                                    $parts = explode('/', $complaint->code);
+                                    $seq = $parts[0] ?? '';
+                                    $month = isset($parts[2]) ? str_pad($parts[2], 2, '0', STR_PAD_LEFT) : '';
+                                    $year = isset($parts[3]) ? substr($parts[3], -2) : '';
+                                @endphp
+                                {{ $seq }}.{{ $month }}.{{ $year }}
+                            </td>
                             <td>
                                 <div class="d-flex justify-content-start align-items-center user-name">
                                     <div class="avatar-wrapper">

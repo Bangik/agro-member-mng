@@ -8,7 +8,6 @@ use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Admin\PartController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Global\UserController as GlobalUserController;
 use App\Http\Controllers\Member\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
