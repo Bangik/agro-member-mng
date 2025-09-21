@@ -116,7 +116,7 @@
         <div class="col-xl-12 col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="d-flex justify-content-between">
+                    <div class="d-md-flex justify-content-between">
                         <h5 class="mb-1">Filter berdasarkan status member</h5>
                         {{-- filter start and end date --}}
                         <form method="GET" action="{{ route('home') }}" class="d-flex">
@@ -254,24 +254,34 @@
         <div class="col-xl-12 col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="d-flex justify-content-between">
-                        <h5 class="mb-1">Status Aspirasi / Aduan</h5>
+                    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-md-between gap-2">
+                        <h5 class="mb-0">Status Aspirasi / Aduan</h5>
+
                         {{-- filter start and end date --}}
-                        <form method="GET" action="{{ route('home') }}" class="d-flex">
-                            <input type="date" name="start_date" class="form-control form-control-sm me-2"
-                                value="{{ request('start_date') }}">
-                            <input type="date" name="end_date" class="form-control form-control-sm me-2"
-                                value="{{ request('end_date') }}">
-                            <select name="view_by" class="form-select form-select-sm me-2">
-                                <option value="week" {{ request('view_by') == 'week' ? 'selected' : '' }}>Mingguan
-                                </option>
-                                <option value="month" {{ request('view_by') == 'month' ? 'selected' : '' }}>Bulanan
-                                </option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-primary">Filter</button>
+                        <form method="GET" action="{{ route('home') }}" class="row g-2 mt-1 mt-md-0 align-items-center">
+                            <div class="col-12 col-sm-6 col-md-auto">
+                                <input type="date" name="start_date" class="form-control form-control-sm"
+                                    value="{{ request('start_date') }}">
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-auto">
+                                <input type="date" name="end_date" class="form-control form-control-sm"
+                                    value="{{ request('end_date') }}">
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-auto">
+                                <select name="view_by" class="form-select form-select-sm">
+                                    <option value="week" {{ request('view_by') == 'week' ? 'selected' : '' }}>Mingguan
+                                    </option>
+                                    <option value="month" {{ request('view_by') == 'month' ? 'selected' : '' }}>Bulanan
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-auto">
+                                <button type="submit" class="btn btn-sm btn-primary w-100 w-md-auto">Filter</button>
+                            </div>
                         </form>
                     </div>
                 </div>
+
                 <div class="card-body pt-lg-2">
                     <div id="status-chart"></div>
                 </div>

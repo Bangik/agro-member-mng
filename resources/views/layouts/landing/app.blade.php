@@ -16,6 +16,18 @@
 
     <!-- Include Scripts for customizer, helper, analytics, config -->
     @include('layouts/sections/scriptsIncludes')
+
+    <style>
+        .landing-menu-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .35);
+            display: none;
+            pointer-events: none;
+            z-index: 1040;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -37,7 +49,7 @@
                 </div>
                 <!-- Menu logo wrapper: End -->
                 <!-- Menu wrapper: Start -->
-                <div class="collapse navbar-collapse landing-nav-menu" id="navbarSupportedContent">
+                <div class="collapse navbar-collapse landing-nav-menu bg-white" id="navbarSupportedContent">
                     <button class="navbar-toggler border-0 text-heading position-absolute end-0 top-0 p-2"
                         type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,6 +62,11 @@
                         <li class="nav-item">
                             <a class="nav-link fw-medium" href="{{ route('profile') }}">Profile</a>
                         </li>
+                        @if (Auth::check())
+                            <li class="nav-item">
+                                <a class="nav-link fw-medium" href="{{ route('home') }}">Dashboard</a>
+                            </li>
+                        @endif
                     </ul>
                 </div>
                 <div class="landing-menu-overlay d-lg-none"></div>
@@ -82,6 +99,63 @@
     </nav>
 
     @yield('content')
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menu = document.getElementById('navbarSupportedContent');
+            const toggles = document.querySelectorAll(
+                '[data-bs-toggle="collapse"][data-bs-target="#navbarSupportedContent"]');
+            const overlay = document.querySelector('.landing-menu-overlay');
+
+            if (!menu || toggles.length === 0) return;
+
+            const openMenu = () => {
+                menu.classList.add('show'); // .collapse.show => tampil (CSS bootstrap)
+                toggles.forEach(t => t.setAttribute('aria-expanded', 'true'));
+                if (overlay) {
+                    overlay.style.display = 'block';
+                    overlay.style.pointerEvents = 'auto';
+                }
+                document.body.style.overflow = 'hidden'; // cegah scroll body saat menu terbuka (mobile)
+            };
+
+            const closeMenu = () => {
+                menu.classList.remove('show');
+                toggles.forEach(t => t.setAttribute('aria-expanded', 'false'));
+                if (overlay) {
+                    overlay.style.display = 'none';
+                    overlay.style.pointerEvents = 'none';
+                }
+                document.body.style.overflow = '';
+            };
+
+            const toggleMenu = () => (menu.classList.contains('show') ? closeMenu() : openMenu());
+
+            // tombol hamburger & tombol close di dalam menu
+            toggles.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    toggleMenu();
+                });
+            });
+
+            // klik overlay untuk menutup
+            overlay?.addEventListener('click', closeMenu);
+
+            // ESC untuk menutup
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeMenu();
+            });
+
+            // Jika viewport balik ke desktop, auto-close
+            const mql = window.matchMedia('(min-width: 992px)');
+            const onBreak = (e) => {
+                if (e.matches) closeMenu();
+            };
+            mql.addEventListener ? mql.addEventListener('change', onBreak) : mql.addListener(onBreak);
+        });
+    </script>
+
 </body>
 
 </html>

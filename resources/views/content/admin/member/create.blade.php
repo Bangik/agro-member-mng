@@ -359,15 +359,15 @@
 
                         <div class="form-floating form-floating-outline mt-5">
                             <input class="form-control @error('photo') is-invalid @enderror" type="file"
-                                id="photo" name="photo" value="{{ old('photo') }}" autofocus
+                                id="photo" name="photo" accept="image/jpeg,image/png,image/webp"
                                 placeholder="Foto Profil" />
-                            <label for="photo">Foto Profil</label>
+                            <label for="photo">Foto Profil (akan dipotong 3×4)</label>
                             @error('photo')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
+                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
                         </div>
+
+                        <img id="photoPreview" class="mt-3 img-thumbnail d-none" alt="Preview 3x4">
 
                         <button type="submit" class="btn btn-primary mt-6">Simpan</button>
                     </div>
@@ -375,4 +375,128 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="cropperModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Crop Foto 3×4</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="img-container" style="max-height:60vh; overflow:auto">
+                        <img id="cropperImage" alt="Source" style="max-width:100%; image-orientation: from-image;">
+                    </div>
+                </div>
+                <div class="modal-footer gap-2">
+                    <button type="button" class="btn btn-outline-secondary" id="rotateLeft">Rotate -90</button>
+                    <button type="button" class="btn btn-outline-secondary" id="rotateRight">Rotate +90</button>
+                    <button type="button" class="btn btn-outline-secondary" id="zoomOut">-</button>
+                    <button type="button" class="btn btn-outline-secondary" id="zoomIn">+</button>
+                    <button type="button" class="btn btn-primary" id="cropUse">Pakai Foto</button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+
+@section('page-style')
+    <link rel="stylesheet" href="https://unpkg.com/cropperjs@1.6.2/dist/cropper.min.css">
+    <script src="https://unpkg.com/cropperjs@1.6.2/dist/cropper.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const input = document.getElementById('photo');
+            const modalEl = document.getElementById('cropperModal');
+            const modal = new bootstrap.Modal(modalEl);
+            const image = document.getElementById('cropperImage');
+            const useBtn = document.getElementById('cropUse');
+            const preview = document.getElementById('photoPreview');
+
+            let cropper = null;
+            let objectUrl = null;
+
+            input.addEventListener('change', (e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+
+                if (!/^image\/(jpe?g|png|webp)$/i.test(file.type)) {
+                    alert('Format gambar harus JPG/PNG/WEBP');
+                    input.value = '';
+                    return;
+                }
+
+                // Buka modal & tampilkan image
+                objectUrl = URL.createObjectURL(file);
+                image.src = objectUrl;
+                modal.show();
+            });
+
+            modalEl.addEventListener('shown.bs.modal', () => {
+                cropper = new Cropper(image, {
+                    aspectRatio: 3 / 4, // 3x4 (portrait)
+                    viewMode: 1,
+                    dragMode: 'move',
+                    autoCropArea: 1,
+                    responsive: true,
+                    background: false,
+                    movable: true,
+                    zoomable: true,
+                    minContainerWidth: 400,
+                    minContainerHeight: 400,
+                });
+            });
+
+            modalEl.addEventListener('hidden.bs.modal', () => {
+                if (cropper) {
+                    cropper.destroy();
+                    cropper = null;
+                }
+                if (objectUrl) {
+                    URL.revokeObjectURL(objectUrl);
+                    objectUrl = null;
+                }
+                image.src = '';
+            });
+
+            // Tombol kontrol
+            document.getElementById('zoomIn').addEventListener('click', () => cropper?.zoom(0.1));
+            document.getElementById('zoomOut').addEventListener('click', () => cropper?.zoom(-0.1));
+            document.getElementById('rotateLeft').addEventListener('click', () => cropper?.rotate(-90));
+            document.getElementById('rotateRight').addEventListener('click', () => cropper?.rotate(90));
+
+            // Pakai hasil crop → replace file input (server tetap terima `photo`)
+            useBtn.addEventListener('click', () => {
+                if (!cropper) return;
+
+                const canvas = cropper.getCroppedCanvas({
+                    width: 354, // output 3x4 standar (px)
+                    height: 472,
+                    fillColor: '#fff', // latar putih untuk PNG/WEBP transparan
+                });
+
+                canvas.toBlob((blob) => {
+                    if (!blob) return;
+
+                    // Buat File baru dari blob, lalu taruh ke input.files
+                    const file = new File([blob], 'photo_3x4.jpg', {
+                        type: 'image/jpeg'
+                    });
+
+                    const dt = new DataTransfer();
+                    dt.items.add(file);
+                    input.files = dt.files; // <— ini kuncinya
+
+                    // Preview opsional
+                    const url = URL.createObjectURL(blob);
+                    preview.src = url;
+                    preview.classList.remove('d-none');
+
+                    modal.hide();
+                }, 'image/jpeg', 0.92);
+            });
+        });
+    </script>
+
 @endsection

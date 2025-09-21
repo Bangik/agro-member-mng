@@ -11,45 +11,52 @@
         $listBg = ['bg-label-primary', 'bg-label-warning', 'bg-label-success'];
     @endphp
     <div class="card">
-        <div class="row mx-1 my-3">
-            <div class="col-md-12 col-12">
-                <div class="d-flex align-items-center justify-content-md-end justify-content-center">
-                    <div class="me-4">
-                        <form action="{{ route('admin.complaints.index') }}" method="GET" id="form-filter">
-                            <label>
-                                <input type="search" class="form-control form-control-sm" placeholder="Cari..."
-                                    id="search" name="search" value="{{ request('search') }}" />
-                            </label>
-                            <label>
-                                <select name="status" id="status" class="form-select form-select-sm"
-                                    onchange="this.form.submit()">
-                                    <option value="">Semua Status</option>
-                                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending
-                                    </option>
-                                    <option value="in_progress" {{ request('status') == 'in_progress' ? 'selected' : '' }}>
-                                        In Progress</option>
-                                    <option value="resolved" {{ request('status') == 'resolved' ? 'selected' : '' }}>
-                                        Resolved</option>
-                                </select>
-                            </label>
-                            <label>
-                                <select id="only_trashed" name="only_trashed" class="form-select form-select-sm"
-                                    onchange="document.getElementById('form-filter').submit()">
-                                    <option value="all" {{ request('only_trashed') == 'all' ? 'selected' : '' }}>Semua
-                                    </option>
-                                    <option value="yes" {{ request('only_trashed') == 'yes' ? 'selected' : '' }}>Hanya
-                                        Terhapus
-                                    </option>
-                                    <option value="no" {{ request('only_trashed') == 'no' ? 'selected' : '' }}>Hanya
-                                        Aktif
-                                    </option>
-                                </select>
-                            </label>
-                        </form>
+        <div class="row g-2 align-items-center my-3 mx-1">
+            <div class="col-12 col-md">
+                <form action="{{ route('admin.complaints.index') }}" method="GET" id="form-filter">
+                    <div class="row g-2 justify-content-md-end">
+
+                        {{-- Search --}}
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                            <div class="input-group input-group-sm">
+                                <input type="search" class="form-control" placeholder="Cari..." id="search"
+                                    name="search" value="{{ request('search') }}">
+                            </div>
+                        </div>
+
+                        {{-- Status --}}
+                        <div class="col-6 col-sm-3 col-md-2 col-lg-2">
+                            <select name="status" id="status" class="form-select form-select-sm"
+                                onchange="this.form.submit()">
+                                <option value="">Semua Status</option>
+                                <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending
+                                </option>
+                                <option value="in_progress" {{ request('status') == 'in_progress' ? 'selected' : '' }}>In
+                                    Progress</option>
+                                <option value="resolved" {{ request('status') == 'resolved' ? 'selected' : '' }}>Resolved
+                                </option>
+                            </select>
+                        </div>
+
+                        {{-- Trashed --}}
+                        <div class="col-6 col-sm-3 col-md-2 col-lg-2">
+                            <select id="only_trashed" name="only_trashed" class="form-select form-select-sm"
+                                onchange="document.getElementById('form-filter').submit()">
+                                <option value="all" {{ request('only_trashed') == 'all' ? 'selected' : '' }}>Semua
+                                </option>
+                                <option value="yes" {{ request('only_trashed') == 'yes' ? 'selected' : '' }}>Hanya
+                                    Terhapus
+                                </option>
+                                <option value="no" {{ request('only_trashed') == 'no' ? 'selected' : '' }}>Hanya Aktif
+                                </option>
+                            </select>
+                        </div>
+
                     </div>
-                </div>
+                </form>
             </div>
         </div>
+
         <div class="table-responsive text-nowrap">
             <table class="table table-hover">
                 @php

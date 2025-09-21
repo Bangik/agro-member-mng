@@ -149,9 +149,35 @@
         <div class="col-xl-8 col-lg-7 col-md-7 order-0 order-md-1">
             <!-- Invoice table -->
             <div class="card mb-4">
+                <div class="card-header py-3">
+                    <div class="row g-2 align-items-center">
+                        <div class="col-12 col-md">
+                            <h5 class="card-title mb-0 text-center text-md-start">Riwayat Kontrak</h5>
+                        </div>
+
+                        <div class="col-12 col-md-auto">
+                            <div
+                                class="d-flex flex-column flex-sm-row flex-md-nowrap justify-content-center justify-content-md-end gap-2">
+                                <a href="{{ route('member.profile.kta') }}" target="_blank"
+                                    class="btn btn-outline-primary btn-sm">
+                                    <i class="ri-printer-line me-1 d-none d-sm-inline"></i>
+                                    <span class="d-none d-sm-inline">Print KTA</span>
+                                    <span class="d-inline d-sm-none">Print KTA</span>
+                                </a>
+
+                                <a href="{{ route('member.profile.pdf') }}" class="btn btn-outline-primary btn-sm">
+                                    <i class="ri-printer-line me-1 d-none d-sm-inline"></i>
+                                    <span class="d-none d-sm-inline">Print Profile</span>
+                                    <span class="d-inline d-sm-none">Print Profile</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card-datatable table-responsive">
                     <div id="DataTables_Table_1_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
-                        <div class="card-header d-flex align-items-center justify-content-between">
+                        {{-- <div class="card-header d-flex align-items-center justify-content-between">
                             <div class="head-label">
                                 <h5 class="card-title mb-0">Riwayat Kontrak</h5>
                             </div>
@@ -167,7 +193,7 @@
                                     <span class="d-none d-sm-inline-block"> Print Profile </span>
                                 </a>
                             </div>
-                        </div>
+                        </div> --}}
                         <table class="table">
                             <thead>
                                 <tr>

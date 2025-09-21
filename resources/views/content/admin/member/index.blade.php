@@ -109,66 +109,78 @@
         $listBg = ['bg-label-primary', 'bg-label-warning', 'bg-label-success'];
     @endphp
     <div class="card">
-        <div class="row mx-1 my-3">
-            <div class="col-md-12 col-12">
-                <div class="d-flex align-items-center justify-content-md-end justify-content-center">
-                    <div class="head-label">
-                        <div id="selectedSummary" class="small text-muted me-3">0 anggota dipilih</div>
+        <div class="row g-2 align-items-center my-3 mx-1">
+            {{-- Ringkasan pilihan --}}
+            <div class="col-12 col-md-auto text-center text-md-start">
+                <div id="selectedSummary" class="small text-muted">0 anggota dipilih</div>
+            </div>
+
+            {{-- Filter --}}
+            <div class="col-12 col-md">
+                <form action="{{ route('admin.members.index') }}" method="GET" id="form-filter">
+                    <div class="row g-2 justify-content-md-end">
+                        {{-- Search --}}
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                            <div class="input-group input-group-sm">
+                                <input type="search" class="form-control" placeholder="Cari berdasarkan nama"
+                                    id="search" name="search" value="{{ request('search') }}">
+                            </div>
+                        </div>
+
+                        {{-- Status aktif/tidak --}}
+                        <div class="col-6 col-sm-3 col-md-2 col-lg-2">
+                            <select name="status" id="status" class="form-select form-select-sm"
+                                onchange="this.form.submit()">
+                                <option value="">Semua Status</option>
+                                <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Aktif</option>
+                                <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Tidak Aktif
+                                </option>
+                            </select>
+                        </div>
+
+                        {{-- Trashed filter --}}
+                        <div class="col-6 col-sm-3 col-md-2 col-lg-2">
+                            <select name="only_trashed" id="only_trashed" class="form-select form-select-sm"
+                                onchange="this.form.submit()">
+                                <option value="all" {{ request('only_trashed') == 'all' ? 'selected' : '' }}>Semua
+                                </option>
+                                <option value="yes" {{ request('only_trashed') == 'yes' ? 'selected' : '' }}>Hanya
+                                    Terhapus
+                                </option>
+                                <option value="no" {{ request('only_trashed') == 'no' ? 'selected' : '' }}>Hanya Aktif
+                                </option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="me-4">
-                        <form action="{{ route('admin.members.index') }}" method="GET" id="form-filter">
-                            <label>
-                                <input type="search" class="form-control form-control-sm"
-                                    placeholder="Cari Berdasarkan Nama" id="search" name="search"
-                                    value="{{ request('search') }}" />
-                            </label>
-                            {{-- filter by status --}}
-                            <label>
-                                <select name="status" id="status" class="form-select form-select-sm"
-                                    onchange="this.form.submit()">
-                                    <option value="">Semua Status</option>
-                                    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Aktif
-                                    </option>
-                                    <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Tidak
-                                        Aktif</option>
-                                </select>
-                            </label>
-                            {{-- filter by trashed --}}
-                            <label>
-                                <select name="only_trashed" id="only_trashed" class="form-select form-select-sm"
-                                    onchange="this.form.submit()">
-                                    <option value="all" {{ request('only_trashed') == 'all' ? 'selected' : '' }}>Semua
-                                    </option>
-                                    <option value="yes" {{ request('only_trashed') == 'yes' ? 'selected' : '' }}>Hanya
-                                        Terhapus
-                                    </option>
-                                    <option value="no" {{ request('only_trashed') == 'no' ? 'selected' : '' }}>Hanya
-                                        Aktif
-                                    </option>
-                                </select>
-                            </label>
-                        </form>
-                    </div>
-                    <div class="add-new">
-                        <button class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal"
-                            data-bs-target="#modalCenter">
-                            <i class="ri-add-line me-0 me-sm-1 d-inline-block d-sm-none"></i>
-                            <span class="d-none d-sm-inline-block"> Import </span>
-                        </button>
-                        {{-- export button --}}
-                        <button class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal"
-                            data-bs-target="#modalExport">
-                            <i class="ri-file-download-line me-0 me-sm-1 d-inline-block d-sm-none"></i>
-                            <span class="d-none d-sm-inline-block"> Export </span>
-                        </button>
-                        <a href="{{ route('admin.members.create') }}" class="btn btn-primary waves-effect waves-light">
-                            <i class="ri-add-line me-0 me-sm-1 d-inline-block d-sm-none"></i>
-                            <span class="d-none d-sm-inline-block"> Tambah </span>
-                        </a>
-                    </div>
+                </form>
+            </div>
+
+            {{-- Aksi --}}
+            <div class="col-12 col-md-auto">
+                <div class="d-flex gap-2 justify-content-center justify-content-md-end">
+                    <button class="btn btn-outline-primary btn-sm w-100 w-md-auto" data-bs-toggle="modal"
+                        data-bs-target="#modalCenter">
+                        <i class="ri-add-line d-inline d-sm-none me-0"></i>
+                        <span class="d-none d-sm-inline">Import</span>
+                        <span class="d-inline d-sm-none">Imp</span>
+                    </button>
+
+                    <button class="btn btn-outline-primary btn-sm w-100 w-md-auto" data-bs-toggle="modal"
+                        data-bs-target="#modalExport">
+                        <i class="ri-file-download-line d-inline d-sm-none me-0"></i>
+                        <span class="d-none d-sm-inline">Export</span>
+                        <span class="d-inline d-sm-none">Exp</span>
+                    </button>
+
+                    <a href="{{ route('admin.members.create') }}" class="btn btn-primary btn-sm w-100 w-md-auto">
+                        <i class="ri-add-line d-inline d-sm-none me-0"></i>
+                        <span class="d-none d-sm-inline">Tambah</span>
+                        <span class="d-inline d-sm-none">Add</span>
+                    </a>
                 </div>
             </div>
         </div>
+
         <div class="table-responsive text-nowrap">
             <table class="table table-hover">
                 <thead>

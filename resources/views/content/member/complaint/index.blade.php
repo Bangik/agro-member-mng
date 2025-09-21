@@ -8,27 +8,35 @@
 
 @section('content')
     <div class="card">
-        <div class="row mx-1 my-3">
-            <div class="col-md-12 col-12">
-                <div class="d-flex align-items-center justify-content-md-end justify-content-center">
-                    <div class="me-4">
-                        <form action="{{ route('member.complaints.index') }}" method="GET" id="form-filter">
-                            <label>
-                                <input type="search" class="form-control form-control-sm" placeholder="Cari..."
-                                    id="search" name="search" value="{{ request('search') }}" />
-                            </label>
-                        </form>
+        <div class="row g-2 align-items-center my-3 mx-1">
+            {{-- Search --}}
+            <div class="col-12 col-md">
+                <form action="{{ route('member.complaints.index') }}" method="GET" id="form-filter">
+                    <div class="row g-2 justify-content-md-end">
+                        <div class="col-12 col-sm-8 col-md-5 col-lg-4">
+                            <div class="input-group input-group-sm">
+                                <input type="search" class="form-control" placeholder="Cari..." id="search"
+                                    name="search" value="{{ request('search') }}">
+                            </div>
+                        </div>
                     </div>
-                    <div class="add-new">
-                        <button class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal"
-                            data-bs-target="#modalCenter">
-                            <i class="ri-add-line me-0 me-sm-1 d-inline-block d-sm-none"></i>
-                            <span class="d-none d-sm-inline-block"> Buat Aspirasi / Aduan </span>
-                        </button>
-                    </div>
+                </form>
+            </div>
+
+            {{-- Button --}}
+            <div class="col-12 col-md-auto">
+                <div
+                    class="d-flex flex-column flex-sm-row flex-md-nowrap justify-content-center justify-content-md-end gap-2">
+                    <button class="btn btn-primary btn-sm w-100 w-md-auto" data-bs-toggle="modal"
+                        data-bs-target="#modalCenter">
+                        <i class="ri-add-line me-1 d-none d-sm-inline"></i>
+                        <span class="d-none d-sm-inline">Buat Aspirasi / Aduan</span>
+                        <span class="d-inline d-sm-none">Buat Aduan</span>
+                    </button>
                 </div>
             </div>
         </div>
+
         <div class="table-responsive text-nowrap">
             <table class="table table-hover">
                 <thead>

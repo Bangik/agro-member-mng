@@ -8,40 +8,46 @@
 
 @section('content')
     <div class="card">
-        <div class="row mx-1 my-3">
-            <div class="col-md-12 col-12">
-                <div class="d-flex align-items-center justify-content-md-end justify-content-center">
-                    <div class="me-4">
-                        <form action="{{ route('admin.admin.index') }}" method="GET" id="form-filter">
-                            <label>
-                                <input type="search" class="form-control form-control-sm" placeholder="Cari Berdasarkan Nama"
-                                    id="search" name="search" value="{{ request('search') }}" />
-                            </label>
-                            <label>
-                                <select id="only_trashed" name="only_trashed" class="form-select form-select-sm"
-                                    onchange="document.getElementById('form-filter').submit()">
-                                    <option value="all" {{ request('only_trashed') == 'all' ? 'selected' : '' }}>Semua
-                                    </option>
-                                    <option value="yes" {{ request('only_trashed') == 'yes' ? 'selected' : '' }}>Hanya
-                                        Terhapus
-                                    </option>
-                                    <option value="no" {{ request('only_trashed') == 'no' ? 'selected' : '' }}>Hanya
-                                        Aktif
-                                    </option>
-                                </select>
-                            </label>
-                        </form>
+        <div class="row g-2 align-items-center my-3 mx-1">
+            {{-- Filter --}}
+            <div class="col-12 col-md">
+                <form action="{{ route('admin.admin.index') }}" method="GET" id="form-filter">
+                    <div class="row g-2 justify-content-md-end">
+                        {{-- Search --}}
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                            <div class="input-group input-group-sm">
+                                <input type="search" class="form-control" id="search" name="search"
+                                    placeholder="Cari berdasarkan nama" value="{{ request('search') }}">
+                            </div>
+                        </div>
+
+                        {{-- Status (Semua/Terhapus/Aktif) --}}
+                        <div class="col-12 col-sm-6 col-md-3 col-lg-2">
+                            <select id="only_trashed" name="only_trashed" class="form-select form-select-sm"
+                                onchange="document.getElementById('form-filter').submit()">
+                                <option value="all" {{ request('only_trashed') == 'all' ? 'selected' : '' }}>Semua
+                                </option>
+                                <option value="yes" {{ request('only_trashed') == 'yes' ? 'selected' : '' }}>Hanya
+                                    Terhapus
+                                </option>
+                                <option value="no" {{ request('only_trashed') == 'no' ? 'selected' : '' }}>Hanya Aktif
+                                </option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="add-new">
-                        <button class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal"
-                            data-bs-target="#modalCenter">
-                            <i class="ri-add-line me-0 me-sm-1 d-inline-block d-sm-none"></i>
-                            <span class="d-none d-sm-inline-block"> Tambah Admin </span>
-                        </button>
-                    </div>
-                </div>
+                </form>
+            </div>
+
+            {{-- Tombol Tambah --}}
+            <div class="col-12 col-md-auto text-md-end">
+                <button class="btn btn-primary w-100 w-md-auto" data-bs-toggle="modal" data-bs-target="#modalCenter">
+                    <i class="ri-add-line me-0 me-sm-1 d-inline-block d-sm-none"></i>
+                    <span class="d-none d-sm-inline-block">Tambah Admin</span>
+                    <span class="d-inline d-sm-none">Tambah</span>
+                </button>
             </div>
         </div>
+
         <div class="table-responsive text-nowrap">
             <table class="table table-hover">
                 <thead>
