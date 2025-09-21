@@ -2,6 +2,55 @@
 
 @section('title', 'Management Anggota | Detail')
 
+@section('page-style')
+    <style>
+        .info-table td {
+            vertical-align: top;
+            padding: 0px;
+        }
+
+        .info-table .col-label {
+            width: 35%;
+            font-weight: 600;
+        }
+
+        .info-table .col-colon {
+            width: 5%;
+            text-align: center;
+        }
+
+        .info-table .col-value {
+            width: 65%;
+        }
+
+        .pre-line {
+            white-space: pre-line;
+        }
+    </style>
+@endsection
+
+@php
+    $fields = [
+        'Nomor Anggota' => $member->reg_number,
+        'NIK' => $member->national_id_number,
+        'TTL' => $member->birth_place . ', ' . \Carbon\Carbon::parse($member->birth_date)->translatedFormat('d F Y'),
+        'Email' => $member->email,
+        'Jenis Kelamin' => $member->gender === 'male' ? 'Laki-laki' : 'Perempuan',
+        'Alamat' => $member->address,
+        'RT/RW' => ($member->rt ?? '-') . ' / ' . ($member->rw ?? '-'),
+        'Desa/Kelurahan' => $member->village,
+        'Kecamatan' => $member->district,
+        'Kota/Kabupaten' => $member->city,
+        'Provinsi' => $member->state,
+        'Kode Pos' => $member->post_code,
+        'Nomor HP' => $member->phone,
+        'Agama' => $member->religion,
+        'Golongan Darah' => $member->blood_type,
+        'Status Pernikahan' => $member->is_married ? 'Menikah' : 'Belum Menikah',
+        'Hobi' => $member->hobbies,
+    ];
+@endphp
+
 @section('content')
     @php
         $activeContract = $contracts->where('end_date', '>=', now()->format('Y-m-d'))->first();
@@ -33,98 +82,61 @@
                     </div>
                     <h5 class="pb-4 border-bottom mb-4">Data Diri</h5>
                     <div class="info-container">
-                        <ul class="list-unstyled mb-6">
-                            <li class="mb-2">
-                                <span class="h6">Nomor Anggota:</span>
-                                <span>{{ $member->reg_number }}</span>
-                            </li>
-                            <li class="mb-2">
-                                <span class="h6">NIK:</span>
-                                <span>{{ $member->national_id_number }}</span>
-                            </li>
-                            <li class="mb-2">
-                                <span class="h6">Tempat, Tanggal Lahir:</span>
-                                <span>{{ $member->birth_place }},
-                                    {{ \Carbon\Carbon::parse($member->birth_date)->translatedFormat('d F Y') }}</span>
-                            </li>
-                            <li class="mb-2">
-                                <span class="h6">Email:</span>
-                                <span>{{ $member->email }}</span>
-                            </li>
-                            <li class="mb-2">
-                                <span class="h6">Jenis Kelamin:</span>
-                                <span>{{ $member->gender === 'male' ? 'Laki-laki' : 'Perempuan' }}</span>
-                            </li>
-                            <li class="mb-2">
-                                <span class="h6">Alamat:</span>
-                                <span>{{ $member->address }}</span>
-                            </li>
-                            <li class="mb-2">
-                                <span class="h6">RT/RW:</span>
-                                <span>{{ $member->rt }} / {{ $member->rw }}</span>
-                            </li>
-                            <li class="mb-2">
-                                <span class="h6">Desa/Kelurahan:</span>
-                                <span>{{ $member->village }}</span>
-                            </li>
-                            <li class="mb-2">
-                                <span class="h6">Kecamatan:</span>
-                                <span>{{ $member->district }}</span>
-                            </li>
-                            <li class="mb-2">
-                                <span class="h6">Kota/Kabupaten:</span>
-                                <span>{{ $member->city }}</span>
-                            </li>
-                            <li class="mb-2">
-                                <span class="h6">Provinsi:</span>
-                                <span>{{ $member->state }}</span>
-                            </li>
-                            <li class="mb-2">
-                                <span class="h6">Kode Pos:</span>
-                                <span>{{ $member->post_code }}</span>
-                            </li>
-                            <li class="mb-2">
-                                <span class="h6">Nomor HP:</span>
-                                <span>{{ $member->phone }}</span>
-                            </li>
-                            <li class="mb-2">
-                                <span class="h6">Agama:</span>
-                                <span>{{ $member->religion }}</span>
-                            </li>
-                            <li class="mb-2">
-                                <span class="h6">Golongan Darah:</span>
-                                <span>{{ $member->blood_type }}</span>
-                            </li>
-                            <li class="mb-2">
-                                <span class="h6">Status Pernikahan:</span>
-                                <span>{{ $member->is_married ? 'Menikah' : 'Belum Menikah' }}</span>
-                            </li>
-                            <li class="mb-2">
-                                <span class="h6">Hobi:</span>
-                                <span>{{ $member->hobbies }}</span>
-                            </li>
-                        </ul>
+                        <div class="table-responsive">
+                            <table class="table table-borderless table-sm align-top info-table">
+                                <colgroup>
+                                    <col class="col-label">
+                                    <col class="col-colon">
+                                    <col class="col-value">
+                                </colgroup>
+                                <tbody>
+                                    @foreach ($fields as $label => $value)
+                                        <tr>
+                                            <td class="fw-semibold">{{ $label }}</td>
+                                            <td class="text-center">:</td>
+                                            <td class="{{ $label === 'Alamat' ? 'pre-line' : '' }}">{{ $value }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <h5 class="pb-4 border-bottom mb-4">Data Pekerjaan</h5>
+                    <h5 class="pb-4 border-bottom mb-4 mt-3">Data Pekerjaan</h5>
                     <div class="info-container">
-                        <ul class="list-unstyled mb-6">
-                            <li class="mb-2">
-                                <span class="h6">Status:</span>
-                                @if ($contracts->where('end_date', '>=', now()->format('Y-m-d'))->count() > 0)
-                                    <span class="badge rounded-pill bg-label-success me-1">Aktif</span>
-                                @else
-                                    <span class="badge rounded-pill bg-label-danger me-1">Tidak Aktif</span>
-                                @endif
-                            </li>
-                            <li class="mb-2">
-                                <span class="h6">Tanggal Aktif:</span>
-                                <span>{{ $activeContract ? \Carbon\Carbon::parse($activeContract->start_date)->translatedFormat('d F Y') : '-' }}</span>
-                            </li>
-                            <li class="mb-2">
-                                <span class="h6">Tanggal Tidak Aktif:</span>
-                                <span>{{ $activeContract ? \Carbon\Carbon::parse($activeContract->end_date)->translatedFormat('d F Y') : '-' }}</span>
-                            </li>
-                        </ul>
+                        <div class="table-responsive">
+                            <table class="table table-borderless table-sm align-top info-table">
+                                <colgroup>
+                                    <col class="col-label">
+                                    <col class="col-colon">
+                                    <col class="col-value">
+                                </colgroup>
+                                <tbody>
+                                    <tr>
+                                        <td class="fw-semibold">Status</td>
+                                        <td class="text-center">:</td>
+                                        <td>
+                                            @if ($contracts->where('end_date', '>=', now()->format('Y-m-d'))->count() > 0)
+                                                <span class="badge rounded-pill bg-label-success me-1">Aktif</span>
+                                            @else
+                                                <span class="badge rounded-pill bg-label-danger me-1">Tidak Aktif</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold">Tanggal Aktif</td>
+                                        <td class="text-center">:</td>
+                                        <td>{{ $activeContract ? \Carbon\Carbon::parse($activeContract->start_date)->translatedFormat('d F Y') : '-' }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold">Tanggal Off</td>
+                                        <td class="text-center">:</td>
+                                        <td>{{ $activeContract ? \Carbon\Carbon::parse($activeContract->end_date)->translatedFormat('d F Y') : '-' }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

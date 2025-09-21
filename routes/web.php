@@ -31,8 +31,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/', [MemberController::class, 'index'])->name('admin.members.index');
     Route::get('/create', [MemberController::class, 'create'])->name('admin.members.create');
     Route::post('/import', [MemberController::class, 'import'])->name('admin.members.import');
-    Route::post('/admin/members/export-kta-pdf', [MemberController::class, 'exportKtaPdfSelected'])
-      ->name('admin.members.export.kta.pdf');
+    Route::post('/admin/members/export-kta-pdf', [MemberController::class, 'exportKtaPdfSelected'])->name('admin.members.export.kta.pdf');
     Route::post('/', [MemberController::class, 'store'])->name('admin.members.store');
     Route::post('/{id}/restore', [MemberController::class, 'restore'])->name('admin.members.restore');
     Route::get('/{id}/detail/pdf', [MemberController::class, 'generatePdf'])->name('admin.members.detail.pdf');
