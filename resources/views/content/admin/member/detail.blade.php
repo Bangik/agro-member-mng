@@ -262,7 +262,7 @@
                                 <div class="form-floating form-floating-outline">
                                     <input type="date" id="start_date"
                                         class="form-control @error('start_date') is-invalid @enderror" placeholder="In"
-                                        required>
+                                        required name="start_date" value="{{ old('start_date') }}">
                                     <label for="start_date">In</label>
                                     @error('start_date')
                                         <span class="invalid-feedback" role="alert">
@@ -275,7 +275,7 @@
                                 <div class="form-floating form-floating-outline">
                                     <input type="date" id="end_date"
                                         class="form-control @error('end_date') is-invalid @enderror" name="end_date"
-                                        placeholder="Out" required>
+                                        placeholder="Out" required value="{{ old('end_date') }}">
                                     <label for="end_date">Out</label>
                                     @error('end_date')
                                         <span class="invalid-feedback" role="alert">
