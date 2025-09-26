@@ -332,7 +332,9 @@ class MemberController extends Controller
         'contracts' => function ($q) {
           $q->withTrashed();
         }
-      ])->firstOrFail();
+      ])->where('id', $id)
+      ->firstOrFail();
+
     $setting = Setting::first();
     return view('content.admin.settings.kta', compact('member', 'setting'));
   }

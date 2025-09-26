@@ -1,6 +1,6 @@
 @extends('layouts.landing.app')
 
-@section('title', 'Aspirasi & Aduan Staff')
+@section('title', 'Aspirasi & Aduan Anggota')
 
 @section('content')
     <!-- Sections:Start -->
@@ -14,7 +14,7 @@
             <div class="container">
                 <div class="hero-text-box text-center">
                     <h2 class="text-primary hero-title mb-4">
-                        Satu pintu untuk aspirasi & aduan staff
+                        Satu pintu untuk aspirasi & aduan Anggota
                     </h2>
                     <h2 class="h6 mb-8 lh-md">
                         Mudahkan komunikasi dan tingkatkan transparansi.<br />

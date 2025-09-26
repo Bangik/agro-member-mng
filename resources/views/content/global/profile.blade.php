@@ -1,6 +1,6 @@
 @extends('layouts.landing.app')
 
-@section('title', 'Aspirasi & Aduan Staff')
+@section('title', 'Aspirasi & Aduan Anggota')
 
 @section('content')
     <section id="landingHero" class="section-py landing-hero position-relative">
